@@ -92,67 +92,36 @@ hold on;
 
 legend('a','o','u');
 
-%% graficar max g_a,g_o,g_u
-x = [200:1500];
-y = [200:1500];
-[X,Y] = meshgrid(x,y);
-
-surf(X,Y,g_a(u_a,sigma, p_a, x));
-
 
 %% calcular error
 fprintf('Error: %0.2f %% \n', sum(ws ~= c)/30*100);
 
-%% graficar elipses de varianza
-N = 50,
-t = [0:2*pi/(N-1):2*pi];
-y1 = sin(t);
-y2 = cos(t);
-
-y = [y1;y2];
-
-e_a = chol(sigma_a);
-xa = e_a'*y;
-
-for i=1:length(xa)
-    xa(:,i) = xa(:,i) + u_a.';
-end
-
-e_o = chol(sigma_o);
-xo = e_o'*y;
-
-for i=1:length(xo)
-    xo(:,i) = xo(:,i) + u_o.';
-end
-
-e_u = chol(sigma_u);
-xu = e_u'*y;
-
-for i=1:length(xu)
-    xu(:,i) = xu(:,i) + u_u.';
-end
-
-figure;
-
-%figure;
-
-plot(f_a(:,1),f_a(:,2),'ro');
-hold on;
-
-plot(f_o(:,1),f_o(:,2),'bo');
-hold on;
-
-plot(f_u(:,1),f_u(:,2),'go');
-hold on;
-
-plot(xa(1,:),xa(2,:));
-hold on;
-plot(xo(1,:),xo(2,:));
-hold on;
-plot(xu(1,:),xu(2,:));
-hold on;
-size(y)
-
+% %% graficar elipses de varianza
+% N = 50,
+% t = [0:2*pi/(N-1):2*pi];
+% y1 = sin(t);
+% y2 = cos(t);
+% 
+% y = [y1;y2];
+% 
+% e_a = chol(sigma_a);
+% xa = e_a'*y+u_a.';
+% 
+% e_o = chol(sigma_o);
+% xo = e_o'*y+u_o.';
+% 
+% e_u = chol(sigma_u);
+% xu = e_u'*y+u_u.';
+% 
+% figure;
+% plot(xa(1,:),xa(2,:));
+% hold on;
+% plot(xo(1,:),xo(2,:));
+% hold on;
+% plot(xu(1,:),xu(2,:));
+% hold on;
+% size(y)
+% 
 % %figure;
 % 
 % plot(f_a(:,1),f_a(:,2),'ro');
@@ -172,12 +141,12 @@ size(y)
 % p = mvnpdf(xx,u_u,sigma_u);
 % p = reshape(p,[length(y),length(x)]);
 % contour(X,Y,p);
-
-axis equal;
-
-xlabel('F1 [Hz]');
-ylabel('F2 [Hz]');
-
-legend('a','o','u');
+% 
+% axis equal;
+% 
+% xlabel('F1 [Hz]');
+% ylabel('F2 [Hz]');
+% 
+% legend('a','o','u');
 
 

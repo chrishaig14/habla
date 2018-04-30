@@ -92,16 +92,11 @@ hold on;
 
 legend('a','o','u');
 
-%% graficar max g_a,g_o,g_u
-x = [200:1500];
-y = [200:1500];
-[X,Y] = meshgrid(x,y);
-
-surf(X,Y,g_a(u_a,sigma, p_a, x));
-
 
 %% calcular error
 fprintf('Error: %0.2f %% \n', sum(ws ~= c)/30*100);
+
+
 
 %% graficar elipses de varianza
 N = 50,
