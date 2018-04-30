@@ -1,0 +1,866 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>procesar_lpc</title><meta name="generator" content="MATLAB 9.2"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-04-09"><meta name="DC.source" content="procesar_lpc.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">calcular coeficientes LPC y error</a></li><li><a href="#3">para la ventana de la muestra 14000 aprox.</a></li><li><a href="#4">envolventes de las vocales</a></li><li><a href="#5">superficie de envolventes y espectrograma</a></li><li><a href="#6">reconstrucci&oacute;n</a></li><li><a href="#7">grafico de la se&ntilde;al original y la se&ntilde;al reconstruida desde muestra 14000 hasta 14100</a></li><li><a href="#8">redondeo del error - codificaci&oacute;n</a></li><li><a href="#9">grafico una porci&oacute;n de la se&ntilde;al original y la se&ntilde;al reconstruida, redondeando el error</a></li><li><a href="#10">guardo las se&ntilde;ales recontruidas</a></li><li><a href="#11">Esto es s&oacute;lo para comprobar que son iguales; y la diferencia que hay con las que tienen redondeo de error</a></li></ul></div><pre class="codeinput">close <span class="string">all</span>
+
+[s,Fs,] = audioread(<span class="string">'fantasia.wav'</span>); <span class="comment">% cambiar por wavread para matlab viejo</span>
+Ts = 1/Fs;
+figure;
+plot([0:length(s) - 1]*Ts, s,<span class="string">'g'</span>);
+axis <span class="string">tight</span>
+xlabel(<span class="string">"Tiempo [s]"</span>);
+title(<span class="string">"Se&ntilde;al original"</span>);
+</pre><img vspace="5" hspace="5" src="procesar_lpc_01.png" alt=""> <h2 id="2">calcular coeficientes LPC y error</h2><pre class="codeinput">n_0 = 1;
+n_f = 400;
+N = 400;
+z_i = [];
+
+M = 20; <span class="comment">% numero de coeficientes LPC</span>
+
+coeficientes = [];
+error_total = [];
+ges = [];
+
+<span class="keyword">while</span> n_0 &lt; length(s)
+
+    <span class="comment">% obtener ventana de 25 ms</span>
+
+    s_w = s(n_0:n_f);
+
+    <span class="comment">% c&aacute;lculo de autocorrelaci&oacute;n</span>
+
+    rhos = xcorr(s_w);
+    rhos1 = rhos(N:N+M-1); <span class="comment">% rho(0) .. rho (M-1)</span>
+    rhos2 = rhos(N+1:N+M); <span class="comment">% rho(1) .. rho (M)</span>
+
+    <span class="comment">% resolver el sistema</span>
+
+    matriz = toeplitz(rhos1);
+    inversa = inv(matriz);
+    bes = inversa*rhos2;
+    G = sqrt(rhos1(1)-bes.'*rhos2); <span class="comment">% ganancia del filtro</span>
+
+    <span class="comment">% calculo de error</span>
+
+    bext = [1, (-bes).'];
+
+    <span class="comment">% aplicar filtro</span>
+
+    [error,z_i] = filter(bext,1,[s_w(1:160).'],z_i);
+
+    <span class="comment">% guardar todo en matrices</span>
+    <span class="comment">% cada fila tiene los coeficientes LPC y la se&ntilde;al de error para cada</span>
+    <span class="comment">% ventana</span>
+    coeficientes = [coeficientes; bes.'];
+    error_total = [error_total; error];
+    ges = [ges;G];
+
+    <span class="comment">% actualizar n_0 y n_f para la proxima ventana</span>
+
+    n_0 = n_0 + 160;
+    n_f = n_f + 160;
+
+    <span class="keyword">if</span> n_f &gt; length(s)
+        <span class="comment">% si la &uacute;ltima ventana queda incompleta, corto ac&aacute;</span>
+        <span class="keyword">break</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2 id="3">para la ventana de la muestra 14000 aprox.</h2><pre class="codeinput">N_DFT = 1024; <span class="comment">% puntos para la DFT</span>
+
+figure;
+
+k = 90; <span class="comment">% 1+160*(89-1) = 14080 -&gt; La ventana empieza en la muestra 14080, no 14000.</span>
+s_w = s(1+160*(k-1):160*(k-1)+400); <span class="comment">% Ventana de 400 muestras</span>
+G = ges(k);
+
+<span class="comment">% DFT de la se&ntilde;al original en esta ventana</span>
+
+dft = fft(s_w,N_DFT);
+frec = ([0:N_DFT-1]*(2*pi/N_DFT))/(2*pi)/Ts;
+y = abs(dft);
+plot(frec(1:N_DFT/2),y(1:N_DFT/2),<span class="string">'r'</span>);
+
+hold <span class="string">on</span>;
+
+<span class="comment">% envolvente LPC</span>
+
+bes = coeficientes(k,:);
+[h,w] = freqz(G,[1, (-bes)],N_DFT);
+frec = w/(2*pi)/Ts;
+y = abs(h);
+plot(frec,y,<span class="string">'b'</span>);
+xlabel(<span class="string">'Frecuencia [Hz]'</span>);
+title(<span class="string">'DFT se&ntilde;al original y envolvente LPC'</span>)
+
+<span class="comment">% marco los picos</span>
+
+[pks,loc] = findpeaks(y);
+hold <span class="string">on</span>;
+pks = pks(1:2);
+loc = loc(1:2);
+plot(frec(loc),pks,<span class="string">'bo'</span>,<span class="string">'markerfacecolor'</span>,<span class="string">'b'</span>);
+
+str = sprintf(<span class="string">'%g , %g Hz'</span>, round(frec(loc(1))), round(frec(loc(2))));
+
+legend(<span class="string">'Original'</span>,<span class="string">'LPC'</span>,str);
+
+
+<span class="comment">% grafico se&ntilde;al original y se&ntilde;al predicha (NO reconstruida, eso viene despu&eacute;s)</span>
+
+figure;
+
+plot(([0:399]+160*(k-1))*Ts,s_w,<span class="string">'r'</span>);
+hold <span class="string">on</span>
+
+s_p = filter(bes,1,[0,s_w.']); <span class="comment">% se&ntilde;al predicha</span>
+s_p = s_p(1:end-1); <span class="comment">% correcci&oacute;n, estaba corrido una muestra</span>
+plot(([0:399]+160*(k-1))*Ts,s_p,<span class="string">'b'</span>);
+xlabel(<span class="string">'Tiempo [s]'</span>);
+legend(<span class="string">'Original'</span>,<span class="string">'Predicci&oacute;n'</span>);
+title(<span class="string">'Se&ntilde;al original y se&ntilde;al predicha'</span>);
+
+<span class="comment">% grafico error como resta entre se&ntilde;al original y predicci&oacute;n</span>
+
+figure;
+er = s_w.'-s_p;
+plot(([0:399]+160*(k-1))*Ts,er,<span class="string">'r'</span>);
+xlabel(<span class="string">'Tiempo [s]'</span>);
+title(<span class="string">'Error entre se&ntilde;al original y se&ntilde;al predicha'</span>);
+
+<span class="comment">% En este gr&aacute;fico se ve que efectivamente, el error es una se&ntilde;al cuasi</span>
+<span class="comment">% peri&oacute;dica, con un peri&oacute;do de 0.005 s y una amplitud entre 0.05 y 0.1</span>
+</pre><img vspace="5" hspace="5" src="procesar_lpc_02.png" alt=""> <img vspace="5" hspace="5" src="procesar_lpc_03.png" alt=""> <img vspace="5" hspace="5" src="procesar_lpc_04.png" alt=""> <h2 id="4">envolventes de las vocales</h2><pre class="codeinput">k_a_1 = 70; <span class="comment">% 700 ms -&gt; ventana para la primera a</span>
+k_a_2 = 90; <span class="comment">% 900 ms -&gt; ventana para la segunda a</span>
+k_i = 112; <span class="comment">% 1120 ms -&gt; ventana para la i</span>
+k_a_3 = 133; <span class="comment">% 1330 ms -&gt; ventana para la tercera a</span>
+
+figure;
+
+col = [<span class="string">'r'</span>,<span class="string">'b'</span>,<span class="string">'g'</span>,<span class="string">'k'</span>];
+
+ks = [k_a_1,k_a_2,k_i,k_a_3];
+
+x = [];
+ys = [];
+
+<span class="keyword">for</span> i = 1:4
+    k = ks(i);
+    bes = coeficientes(k,:);
+    [h,w] = freqz(G,[1, (-bes)],1000);
+    frec2 = w/(2*pi)/Ts;
+    x = frec2;
+    y2 = abs(h);
+    ys = [ys;y2.'];
+    plot(frec2,y2,col(i),<span class="string">'linewidth'</span>,2);
+    hold <span class="string">on</span>
+<span class="keyword">end</span>
+
+
+xlabel(<span class="string">'Frecuencia [Hz]'</span>);
+title(<span class="string">'Envolventes de las vocales'</span>)
+
+strs = [];
+
+<span class="keyword">for</span> i = 1:4
+
+    <span class="comment">% Para cada una marco los primeros tres picos</span>
+
+    [pks,loc] = findpeaks(ys(i,:));
+    pks = pks(1:3);
+    loc = loc(1:3);
+    plot(x(loc),pks,strcat(col(i),<span class="string">'o'</span>),<span class="string">'MarkerFaceColor'</span>, col(i));
+
+    str = sprintf(<span class="string">'%g, '</span>,x(loc));
+    str = str(1:end-2);
+    str = strcat(str, <span class="string">' Hz'</span>);
+    str = string(str);
+    strs = [strs;str];
+
+    hold <span class="string">on</span>
+<span class="keyword">end</span>
+
+legend(<span class="string">'a [1]'</span>, <span class="string">'a [2]'</span>,<span class="string">'i'</span>, <span class="string">'a [3]'</span>,strs(1),strs(2),strs(3),strs(4));
+
+<span class="comment">% En este gr&aacute;fico se ve que los primeros dos fomantes de las "a" se</span>
+<span class="comment">% encuentran alrededor de los 800 y 1600 Hz respectivamente. Para la "i",</span>
+<span class="comment">% se encuentran en 300 y 2300 Hz aprox. Por otro lado, el gr&aacute;fico para la</span>
+<span class="comment">% tercera "a" es como una superposici&oacute;n entre el de las otras "a" y el de</span>
+<span class="comment">% la "i", por la transici&oacute;n que hay entre las dos vocales al final de la</span>
+<span class="comment">% palabra. Por &uacute;ltimo se observa que en la primera "a" no hay tanta</span>
+<span class="comment">% diferencia entre los dos primeros formantes como en las otras, porque</span>
+<span class="comment">% seg&uacute;n lo que se escucha en la se&ntilde;al, esta "a" es m&aacute;s corta y d&eacute;bil, no es</span>
+<span class="comment">% tan clara como las otras dos.</span>
+</pre><img vspace="5" hspace="5" src="procesar_lpc_05.png" alt=""> <h2 id="5">superficie de envolventes y espectrograma</h2><pre class="codeinput">error = error_total;
+n_ventanas = size(error,1);
+
+figure;
+
+spectrogram(s(1:160*n_ventanas),160,[],[],Fs,<span class="string">'yaxis'</span>,<span class="string">'power'</span>);
+colormap <span class="string">bone</span>
+shading <span class="string">interp</span>
+view(2)
+title(<span class="string">'Espectrograma'</span>)
+
+hs = [];
+
+<span class="keyword">for</span> k = 1:n_ventanas
+
+    <span class="comment">% C&aacute;lculo de envolventes para cada ventana, usando los coeficientes LPC</span>
+
+    bes = coeficientes(k,:);
+    [h,w] = freqz(G,[1, (-bes)],100);
+    frec = w/(2*pi)/Ts;
+    y2 = abs(h);
+    hs = [hs; y2.'];
+<span class="keyword">end</span>
+
+figure;
+tiempos = (0:n_ventanas-1)*160*Ts;
+surf(tiempos.', frec, log(hs.'));
+colormap <span class="string">bone</span>
+shading <span class="string">interp</span>
+axis <span class="string">tight</span>
+view(2)
+xlabel(<span class="string">'Tiempo [s]'</span>)
+ylabel(<span class="string">'Frecuencia [Hz]'</span>)
+
+title(<span class="string">'Superficie envolventes'</span>)
+
+<span class="comment">% En la superficie de envolventes se ve que s&oacute;lo con los coeficientes LPC</span>
+<span class="comment">% se obtuvo un gr&aacute;fico muy similar al espectrograma de la se&ntilde;al original, y</span>
+<span class="comment">% se mantuvo la informaci&oacute;n m&aacute;s importante para identificar los formantes y</span>
+<span class="comment">% los fonemas correspondientes.</span>
+</pre><img vspace="5" hspace="5" src="procesar_lpc_06.png" alt=""> <img vspace="5" hspace="5" src="procesar_lpc_07.png" alt=""> <h2 id="6">reconstrucci&oacute;n</h2><pre class="codeinput"><span class="comment">% cada 10 ms de error, tomar 20 coeficientes LPC y reconstruir</span>
+
+<span class="comment">% 10 ms -&gt; 160 muestras;</span>
+
+s_rec_total = reconstruir(coeficientes, error, ges);
+
+
+<span class="comment">% % reproducir se&ntilde;al reconstruida</span>
+<span class="comment">%</span>
+<span class="comment">% p = audioplayer(s_rec_total,Fs);</span>
+<span class="comment">% play(p);</span>
+
+<span class="comment">% grafico de la se&ntilde;al original y la se&ntilde;al reconstruida</span>
+
+figure;
+plot([0:length(s_rec_total)-1]*Ts,s(1:length(s_rec_total)),<span class="string">'r'</span>);
+hold <span class="string">on</span>;
+plot([0:length(s_rec_total)-1]*Ts,s_rec_total,<span class="string">'b'</span>);
+title(<span class="string">'Se&ntilde;al original y reconstruida'</span>);
+xlabel(<span class="string">'Tiempo [s]'</span>);
+axis <span class="string">tight</span>
+legend(<span class="string">'Original'</span>,<span class="string">'Reconstruida'</span>);
+
+<span class="comment">% Son iguales, por eso se ve una sola se&ntilde;al.</span>
+</pre><img vspace="5" hspace="5" src="procesar_lpc_08.png" alt=""> <h2 id="7">grafico de la se&ntilde;al original y la se&ntilde;al reconstruida desde muestra 14000 hasta 14100</h2><pre class="codeinput">figure;
+plot([13999:14099]*Ts,s(14000:14100),<span class="string">'r'</span>);
+hold <span class="string">on</span>;
+plot([13999:14099]*Ts,s_rec_total(14000:14100),<span class="string">'b'</span>);
+title(<span class="string">'Se&ntilde;al original y reconstruida'</span>);
+axis <span class="string">tight</span>
+xlabel(<span class="string">'Tiempo [s]'</span>);
+legend(<span class="string">'Original'</span>,<span class="string">'Reconstruida'</span>);
+
+<span class="comment">% Son iguales, por eso se ve una sola se&ntilde;al.</span>
+</pre><img vspace="5" hspace="5" src="procesar_lpc_09.png" alt=""> <h2 id="8">redondeo del error - codificaci&oacute;n</h2><pre class="codeinput">figure;
+cs = [<span class="string">'r'</span>,<span class="string">'g'</span>,<span class="string">'b'</span>];
+bs = [4,6,8];
+
+s_rec_red = []; <span class="comment">% se&ntilde;al reconstruida con el error redondeado</span>
+
+n_i = 14000; <span class="comment">% rango de la se&ntilde;al que voy a usar en los graficos</span>
+n_f = 14100;
+t = (n_i-1:n_f-1)*Ts;
+
+<span class="comment">% grafico los errores redondeados para una porci&oacute;n de la se&ntilde;al</span>
+
+<span class="keyword">for</span> i = 1:length(bs)
+    b = bs(i);
+    c = cs(i);
+
+    error_red = error;
+
+    minimo = min(error(:));
+    error_red = error_red - minimo; <span class="comment">% todo positivo</span>
+
+    maximo = max(error_red(:));
+    error_red = error_red/maximo; <span class="comment">% entre 0 y 1</span>
+
+    B = 2^b; <span class="comment">% cantidad de niveles</span>
+    error_red = round(error_red*(B-1)); <span class="comment">% entre 0 y B-1</span>
+
+
+    error_red = error_red/(B-1); <span class="comment">% entre 0 y 1</span>
+
+    error_red = error_red*maximo + minimo;
+
+    s_rec_red = [s_rec_red; reconstruir(coeficientes, error_red, ges)];
+
+    error_w = error_red(:);
+    error_w = error_w(n_i:n_f);
+    plot(t,error_w,c,<span class="string">'linewidth'</span>,1);
+    hold <span class="string">on</span>;
+<span class="keyword">end</span>
+
+plot(t,error(n_i:n_f),<span class="string">'k'</span>,<span class="string">'linewidth'</span>,1);
+xlabel(<span class="string">'Tiempo [s]'</span>);
+legend(<span class="string">'4 bits'</span>,<span class="string">'6 bits'</span>,<span class="string">'8 bits'</span>,<span class="string">'Original'</span>);
+axis <span class="string">tight</span>;
+title(<span class="string">'Error original vs redondeado'</span>);
+</pre><img vspace="5" hspace="5" src="procesar_lpc_10.png" alt=""> <h2 id="9">grafico una porci&oacute;n de la se&ntilde;al original y la se&ntilde;al reconstruida, redondeando el error</h2><pre class="codeinput">figure;
+<span class="keyword">for</span> i = 1:3
+    s_rec_red_w = s_rec_red(i,n_i:n_f);
+    plot(t,s_rec_red_w,cs(i),<span class="string">'linewidth'</span>,1);
+    hold <span class="string">on</span>;
+<span class="keyword">end</span>
+
+plot(t,s_rec_total(n_i:n_f),<span class="string">'k'</span>,<span class="string">'linewidth'</span>,1);
+xlabel(<span class="string">'Tiempo [s]'</span>);
+legend(<span class="string">'4 bits'</span>,<span class="string">'6 bits'</span>,<span class="string">'8 bits'</span>,<span class="string">'Original'</span>);
+axis <span class="string">tight</span>;
+title(<span class="string">"Se&ntilde;al reconstruida original vs con redondeo de error"</span>)
+
+<span class="comment">% En los gr&aacute;ficos anteriores se ve que pr&aacute;cticamente no hay diferencia</span>
+<span class="comment">% entre las se&ntilde;ales de 8 y 6 bits y la original; con 4</span>
+<span class="comment">% bits la diferencia es un poco mayor.</span>
+</pre><img vspace="5" hspace="5" src="procesar_lpc_11.png" alt=""> <h2 id="10">guardo las se&ntilde;ales recontruidas</h2><pre class="codeinput">audiowrite(<span class="string">'reconstruida.wav'</span>,s_rec_total,Fs);
+audiowrite(<span class="string">'reconstruida_4bits.wav'</span>,s_rec_red(1,:),Fs);
+audiowrite(<span class="string">'reconstruida_6bits.wav'</span>,s_rec_red(2,:),Fs);
+audiowrite(<span class="string">'reconstruida_8bits.wav'</span>,s_rec_red(3,:),Fs);
+</pre><h2 id="11">Esto es s&oacute;lo para comprobar que son iguales; y la diferencia que hay con las que tienen redondeo de error</h2><pre class="codeinput">figure;
+plot([0:length(s_rec_total)-1]*Ts, s(1:length(s_rec_total)).' - s_rec_total);
+axis <span class="string">tight</span>;
+title(<span class="string">"Resta entre original y reconstruida"</span>);
+
+figure;
+plot([0:length(s_rec_total)-1]*Ts, s(1:length(s_rec_total)).' - s_rec_red(1,:));
+axis <span class="string">tight</span>;
+title(<span class="string">"Resta entre original y reconstruida 4 bits"</span>);
+
+figure;
+plot([0:length(s_rec_total)-1]*Ts, s(1:length(s_rec_total)).' - s_rec_red(2,:));
+axis <span class="string">tight</span>;
+title(<span class="string">"Resta entre original y reconstruida 6 bits"</span>);
+
+figure;
+plot([0:length(s_rec_total)-1]*Ts, s(1:length(s_rec_total)).' - s_rec_red(3,:));
+axis <span class="string">tight</span>;
+title(<span class="string">"Resta entre original y reconstruida 8 bits"</span>);
+
+<span class="comment">% En todos los casos, incluso con el error redondeado a 4 bits es posible</span>
+<span class="comment">% identificar la palabra, aunque a medida que se usan menos bits,</span>
+<span class="comment">% se escucha m&aacute;s ruido.</span>
+
+<span class="keyword">function</span> s_rec_total = reconstruir(coeficientes, error, ges)
+
+    <span class="comment">% a partir de los coeficientes LPC, la se&ntilde;al de error y las ganancias,</span>
+    <span class="comment">% reconstruir la se&ntilde;al</span>
+
+    s_rec_total = [];
+    z_i = [];
+
+    n_ventanas = size(error,1);
+
+    <span class="keyword">for</span> i = 1:n_ventanas
+
+        bes = coeficientes(i,:);
+
+        error_w = error(i,:);
+
+        bext = [1, (-bes)];
+
+        G = ges(i);
+
+        <span class="comment">% aplicar filtro inverso</span>
+
+        [s_rec,z_i] = filter(1,bext,error_w,z_i);
+
+        s_rec_total = [s_rec_total, s_rec];
+
+    <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="procesar_lpc_12.png" alt=""> <img vspace="5" hspace="5" src="procesar_lpc_13.png" alt=""> <img vspace="5" hspace="5" src="procesar_lpc_14.png" alt=""> <img vspace="5" hspace="5" src="procesar_lpc_15.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+close all
+
+[s,Fs,] = audioread('fantasia.wav'); % cambiar por wavread para matlab viejo
+Ts = 1/Fs;
+figure;
+plot([0:length(s) - 1]*Ts, s,'g');
+axis tight
+xlabel("Tiempo [s]");
+title("Señal original");
+%% calcular coeficientes LPC y error
+
+n_0 = 1;
+n_f = 400;
+N = 400;
+z_i = [];
+
+M = 20; % numero de coeficientes LPC
+    
+coeficientes = [];
+error_total = [];
+ges = [];
+
+while n_0 < length(s)
+    
+    % obtener ventana de 25 ms
+    
+    s_w = s(n_0:n_f);
+
+    % cálculo de autocorrelación
+
+    rhos = xcorr(s_w);
+    rhos1 = rhos(N:N+M-1); % rho(0) .. rho (M-1)
+    rhos2 = rhos(N+1:N+M); % rho(1) .. rho (M)
+    
+    % resolver el sistema
+    
+    matriz = toeplitz(rhos1);
+    inversa = inv(matriz);
+    bes = inversa*rhos2;
+    G = sqrt(rhos1(1)-bes.'*rhos2); % ganancia del filtro
+
+    % calculo de error
+
+    bext = [1, (-bes).'];
+    
+    % aplicar filtro
+    
+    [error,z_i] = filter(bext,1,[s_w(1:160).'],z_i);
+    
+    % guardar todo en matrices
+    % cada fila tiene los coeficientes LPC y la señal de error para cada
+    % ventana
+    coeficientes = [coeficientes; bes.'];
+    error_total = [error_total; error];
+    ges = [ges;G];
+    
+    % actualizar n_0 y n_f para la proxima ventana
+    
+    n_0 = n_0 + 160;
+    n_f = n_f + 160;
+    
+    if n_f > length(s)
+        % si la última ventana queda incompleta, corto acá
+        break
+    end
+end
+
+
+%% para la ventana de la muestra 14000 aprox.
+
+N_DFT = 1024; % puntos para la DFT
+
+figure;
+
+k = 90; % 1+160*(89-1) = 14080 -> La ventana empieza en la muestra 14080, no 14000.
+s_w = s(1+160*(k-1):160*(k-1)+400); % Ventana de 400 muestras
+G = ges(k);
+
+% DFT de la señal original en esta ventana
+
+dft = fft(s_w,N_DFT);
+frec = ([0:N_DFT-1]*(2*pi/N_DFT))/(2*pi)/Ts;
+y = abs(dft);
+plot(frec(1:N_DFT/2),y(1:N_DFT/2),'r');
+
+hold on;
+
+% envolvente LPC
+
+bes = coeficientes(k,:);
+[h,w] = freqz(G,[1, (-bes)],N_DFT);
+frec = w/(2*pi)/Ts;
+y = abs(h);
+plot(frec,y,'b');
+xlabel('Frecuencia [Hz]');
+title('DFT señal original y envolvente LPC')
+
+% marco los picos
+
+[pks,loc] = findpeaks(y);
+hold on;
+pks = pks(1:2);
+loc = loc(1:2);
+plot(frec(loc),pks,'bo','markerfacecolor','b');
+
+str = sprintf('%g , %g Hz', round(frec(loc(1))), round(frec(loc(2))));
+
+legend('Original','LPC',str);
+
+
+% grafico señal original y señal predicha (NO reconstruida, eso viene después)
+
+figure;
+
+plot(([0:399]+160*(k-1))*Ts,s_w,'r');
+hold on
+
+s_p = filter(bes,1,[0,s_w.']); % señal predicha
+s_p = s_p(1:end-1); % corrección, estaba corrido una muestra
+plot(([0:399]+160*(k-1))*Ts,s_p,'b');
+xlabel('Tiempo [s]');
+legend('Original','Predicción');
+title('Señal original y señal predicha');
+
+% grafico error como resta entre señal original y predicción
+
+figure;
+er = s_w.'-s_p;
+plot(([0:399]+160*(k-1))*Ts,er,'r');
+xlabel('Tiempo [s]');
+title('Error entre señal original y señal predicha');
+
+% En este gráfico se ve que efectivamente, el error es una señal cuasi
+% periódica, con un periódo de 0.005 s y una amplitud entre 0.05 y 0.1
+
+%% envolventes de las vocales
+
+k_a_1 = 70; % 700 ms -> ventana para la primera a
+k_a_2 = 90; % 900 ms -> ventana para la segunda a
+k_i = 112; % 1120 ms -> ventana para la i
+k_a_3 = 133; % 1330 ms -> ventana para la tercera a
+
+figure;
+
+col = ['r','b','g','k'];
+
+ks = [k_a_1,k_a_2,k_i,k_a_3];
+
+x = [];
+ys = [];
+
+for i = 1:4
+    k = ks(i);
+    bes = coeficientes(k,:);
+    [h,w] = freqz(G,[1, (-bes)],1000);
+    frec2 = w/(2*pi)/Ts;
+    x = frec2;
+    y2 = abs(h);
+    ys = [ys;y2.'];
+    plot(frec2,y2,col(i),'linewidth',2);
+    hold on
+end
+
+
+xlabel('Frecuencia [Hz]');
+title('Envolventes de las vocales')
+
+strs = [];
+
+for i = 1:4
+    
+    % Para cada una marco los primeros tres picos
+    
+    [pks,loc] = findpeaks(ys(i,:));
+    pks = pks(1:3);
+    loc = loc(1:3);
+    plot(x(loc),pks,strcat(col(i),'o'),'MarkerFaceColor', col(i));
+
+    str = sprintf('%g, ',x(loc));
+    str = str(1:end-2);
+    str = strcat(str, ' Hz');
+    str = string(str);
+    strs = [strs;str];
+
+    hold on
+end
+
+legend('a [1]', 'a [2]','i', 'a [3]',strs(1),strs(2),strs(3),strs(4));
+
+% En este gráfico se ve que los primeros dos fomantes de las "a" se
+% encuentran alrededor de los 800 y 1600 Hz respectivamente. Para la "i",
+% se encuentran en 300 y 2300 Hz aprox. Por otro lado, el gráfico para la
+% tercera "a" es como una superposición entre el de las otras "a" y el de
+% la "i", por la transición que hay entre las dos vocales al final de la
+% palabra. Por último se observa que en la primera "a" no hay tanta
+% diferencia entre los dos primeros formantes como en las otras, porque
+% según lo que se escucha en la señal, esta "a" es más corta y débil, no es
+% tan clara como las otras dos.
+
+%% superficie de envolventes y espectrograma
+
+error = error_total;
+n_ventanas = size(error,1);
+
+figure;
+
+spectrogram(s(1:160*n_ventanas),160,[],[],Fs,'yaxis','power');
+colormap bone
+shading interp
+view(2)
+title('Espectrograma')
+
+hs = [];
+
+for k = 1:n_ventanas
+    
+    % Cálculo de envolventes para cada ventana, usando los coeficientes LPC
+    
+    bes = coeficientes(k,:);
+    [h,w] = freqz(G,[1, (-bes)],100);
+    frec = w/(2*pi)/Ts;
+    y2 = abs(h);
+    hs = [hs; y2.'];
+end
+
+figure;
+tiempos = (0:n_ventanas-1)*160*Ts;
+surf(tiempos.', frec, log(hs.'));
+colormap bone
+shading interp
+axis tight
+view(2)
+xlabel('Tiempo [s]')
+ylabel('Frecuencia [Hz]')
+
+title('Superficie envolventes')
+
+% En la superficie de envolventes se ve que sólo con los coeficientes LPC
+% se obtuvo un gráfico muy similar al espectrograma de la señal original, y
+% se mantuvo la información más importante para identificar los formantes y
+% los fonemas correspondientes.
+
+%% reconstrucción
+
+
+% cada 10 ms de error, tomar 20 coeficientes LPC y reconstruir
+
+% 10 ms -> 160 muestras;
+
+s_rec_total = reconstruir(coeficientes, error, ges);
+
+
+% % reproducir señal reconstruida
+% 
+% p = audioplayer(s_rec_total,Fs);
+% play(p);
+
+% grafico de la señal original y la señal reconstruida
+
+figure;
+plot([0:length(s_rec_total)-1]*Ts,s(1:length(s_rec_total)),'r');
+hold on;
+plot([0:length(s_rec_total)-1]*Ts,s_rec_total,'b');
+title('Señal original y reconstruida');
+xlabel('Tiempo [s]');
+axis tight
+legend('Original','Reconstruida');
+
+% Son iguales, por eso se ve una sola señal.
+
+%% grafico de la señal original y la señal reconstruida desde muestra 14000 hasta 14100
+
+figure;
+plot([13999:14099]*Ts,s(14000:14100),'r');
+hold on;
+plot([13999:14099]*Ts,s_rec_total(14000:14100),'b');
+title('Señal original y reconstruida');
+axis tight
+xlabel('Tiempo [s]');
+legend('Original','Reconstruida');
+
+% Son iguales, por eso se ve una sola señal.
+
+
+%% redondeo del error - codificación
+figure;
+cs = ['r','g','b'];
+bs = [4,6,8];
+
+s_rec_red = []; % señal reconstruida con el error redondeado
+
+n_i = 14000; % rango de la señal que voy a usar en los graficos
+n_f = 14100;
+t = (n_i-1:n_f-1)*Ts;
+
+% grafico los errores redondeados para una porción de la señal
+
+for i = 1:length(bs)
+    b = bs(i);
+    c = cs(i);
+    
+    error_red = error;
+    
+    minimo = min(error(:));
+    error_red = error_red - minimo; % todo positivo
+
+    maximo = max(error_red(:));
+    error_red = error_red/maximo; % entre 0 y 1
+
+    B = 2^b; % cantidad de niveles
+    error_red = round(error_red*(B-1)); % entre 0 y B-1
+
+    
+    error_red = error_red/(B-1); % entre 0 y 1
+
+    error_red = error_red*maximo + minimo;
+    
+    s_rec_red = [s_rec_red; reconstruir(coeficientes, error_red, ges)];
+    
+    error_w = error_red(:);
+    error_w = error_w(n_i:n_f);
+    plot(t,error_w,c,'linewidth',1);
+    hold on;
+end
+
+plot(t,error(n_i:n_f),'k','linewidth',1);
+xlabel('Tiempo [s]');
+legend('4 bits','6 bits','8 bits','Original');
+axis tight;
+title('Error original vs redondeado');
+
+%% grafico una porción de la señal original y la señal reconstruida, redondeando el error
+
+figure;
+for i = 1:3
+    s_rec_red_w = s_rec_red(i,n_i:n_f);
+    plot(t,s_rec_red_w,cs(i),'linewidth',1);
+    hold on;
+end
+
+plot(t,s_rec_total(n_i:n_f),'k','linewidth',1);
+xlabel('Tiempo [s]');
+legend('4 bits','6 bits','8 bits','Original');
+axis tight;
+title("Señal reconstruida original vs con redondeo de error")
+
+% En los gráficos anteriores se ve que prácticamente no hay diferencia
+% entre las señales de 8 y 6 bits y la original; con 4
+% bits la diferencia es un poco mayor.
+
+%% guardo las señales recontruidas
+
+audiowrite('reconstruida.wav',s_rec_total,Fs);
+audiowrite('reconstruida_4bits.wav',s_rec_red(1,:),Fs);
+audiowrite('reconstruida_6bits.wav',s_rec_red(2,:),Fs);
+audiowrite('reconstruida_8bits.wav',s_rec_red(3,:),Fs);
+
+
+%% Esto es sólo para comprobar que son iguales; y la diferencia que hay con las que tienen redondeo de error
+
+figure;
+plot([0:length(s_rec_total)-1]*Ts, s(1:length(s_rec_total)).' - s_rec_total);
+axis tight;
+title("Resta entre original y reconstruida");
+
+figure;
+plot([0:length(s_rec_total)-1]*Ts, s(1:length(s_rec_total)).' - s_rec_red(1,:));
+axis tight;
+title("Resta entre original y reconstruida 4 bits");
+
+figure;
+plot([0:length(s_rec_total)-1]*Ts, s(1:length(s_rec_total)).' - s_rec_red(2,:));
+axis tight;
+title("Resta entre original y reconstruida 6 bits");
+
+figure;
+plot([0:length(s_rec_total)-1]*Ts, s(1:length(s_rec_total)).' - s_rec_red(3,:));
+axis tight;
+title("Resta entre original y reconstruida 8 bits");
+
+% En todos los casos, incluso con el error redondeado a 4 bits es posible
+% identificar la palabra, aunque a medida que se usan menos bits, 
+% se escucha más ruido.
+
+function s_rec_total = reconstruir(coeficientes, error, ges)
+
+    % a partir de los coeficientes LPC, la señal de error y las ganancias,
+    % reconstruir la señal
+
+    s_rec_total = [];
+    z_i = [];
+
+    n_ventanas = size(error,1);
+ 
+    for i = 1:n_ventanas
+
+        bes = coeficientes(i,:);
+
+        error_w = error(i,:);
+
+        bext = [1, (-bes)];
+
+        G = ges(i);
+
+        % aplicar filtro inverso
+        
+        [s_rec,z_i] = filter(1,bext,error_w,z_i);
+
+        s_rec_total = [s_rec_total, s_rec];
+
+    end
+
+end
+##### SOURCE END #####
+--></body></html>
