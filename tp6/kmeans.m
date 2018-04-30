@@ -20,9 +20,9 @@ f_u = us(1:N,1:2);
 
 M = 1;
 
-u_a = mean(f_a(1:M,:));
-u_o = mean(f_o(1:M,:));
-u_u = mean(f_u(1:M,:));
+u_a = mean(f_a(1:M,:),1);
+u_o = mean(f_o(1:M,:),1);
+u_u = mean(f_u(1:M,:),1);
 
 %% L iteraciones
 c = zeros(1,N);
@@ -31,7 +31,7 @@ L = 15;
 x = [f_a;f_o;f_u];
  f_form = figure;
  f_d = figure;
- d_iter = zeros(1,L); % distorsión para cada iteración
+ d_iter = zeros(1,L); % distorsiï¿½n para cada iteraciï¿½n
 for j=1:L
     d = [0,0,0]; %distorsion
     for i=1:length(x)
