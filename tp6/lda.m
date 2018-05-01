@@ -66,11 +66,11 @@ c = zeros(1,30);
 for i = 1: length(xs)
     x = xs(i,:);
     % p(a|x)
-    p_a_x = g(u_a,sigma, p_a, x);
+    p_a_x = g_k(x(1),x(2),sigma, u_a, p_a);
     % p(o|x)
-    p_o_x = g(u_o,sigma, p_o, x);
+    p_o_x = g_k(x(1),x(2),sigma, u_o, p_o);
     % p(u|x)
-    p_u_x = g(u_u,sigma, p_u, x);
+    p_u_x = g_k(x(1),x(2),sigma, u_u, p_u);
     
     [m,l] = max([p_a_x,p_o_x,p_u_x]);
     
@@ -95,6 +95,75 @@ legend('a','o','u');
 
 %% calcular error
 fprintf('Error: %0.2f %% \n', sum(ws ~= c)/30*100);
+
+f1 = 0:25:2000;
+f2 = 0:25:2000;
+[F1,F2] = meshgrid(f1,f2);
+
+u = zeros(3,2);
+K = 3;
+xk = cell(1,K);
+
+u(1,:) = u_a;
+u(2,:) = u_o;
+u(3,:) = u_u;
+
+xk{1} = x_as;
+xk{2} = x_os;
+xk{3} = x_us;
+
+z = cell(1,K);
+
+for k=1:K
+
+    u_k = u(k,:);
+%     sigma_k = calcular_sigma(xk{k},u_k);
+    pi_k = 1/3;
+    z{k} = zeros(size(F1));
+    for i=1:numel(F1)
+        x = F1(i);
+        y = F2(i);
+        z{k}(i) = g_k(x,y,sigma,u_k, pi_k);
+    end
+
+    figure;
+    size(z{k})
+    surf(F1,F2,z{k},'EdgeColor','none');
+    xlabel('x');
+    ylabel('y');
+	zlabel('z');
+    view(2)
+    
+end
+
+clas = zeros(size(F1));
+
+
+
+for i=1:numel(F1)
+        v = zeros(1,K);
+        
+        for k=1:K
+            v(k) = z{k}(i);
+        end
+        
+        [m,clas(i)] = max(v);
+end
+
+    figure;
+    h = surf(F1,F2,clas,'EdgeColor','none');
+    xlabel('x');
+    ylabel('y');
+	zlabel('z');
+    view(2)
+
+
+
+
+
+
+
+
 
 % %% graficar elipses de varianza
 % N = 50,
