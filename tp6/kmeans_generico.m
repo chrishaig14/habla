@@ -26,7 +26,7 @@ end
 
 %% tomo M de cada clase y calculo las medias iniciales
 
-M = 1;
+M = 10;
 
 u = zeros(K, 2);
 for i = 1:K
@@ -42,7 +42,7 @@ x = zeros(K * N, 2);
 % pongo todas las muestras juntas
 
 for i = 1:K
-    x((i-1)*N + 1:(i-1)*N + N, :) = f{i}; 
+    x((i-1)*N + 1:(i-1)*N + N, :) = f{i};
 end
 
 %%
@@ -63,7 +63,7 @@ for j = 1:L
         d(l) = d(l) + m;
     end
     d_iter(j) = sum(d);
- 
+    
     xk = cell(1,K);
     
     fprintf('Interacion %i\n',j);
@@ -85,35 +85,35 @@ for j = 1:L
     
     figure(f_form);
     clf;
- 
+    
     for z=1:K
         plot(u(z,1),u(z,2),'o','color',col(z),'markersize',10,'markerfacecolor',col(z));
         hold on;
         plot(xk{z}(:, 1), xk{z}(:, 2), 'o','color',col(z));
         hold on;
     end
-
+    
     xlabel('F1 [Hz]');
     ylabel('F2 [Hz]');
     
     str = sprintf('Iteracion %i', j);
     title(str);
- 
+    
     
     figure(f_d);
     clf;
     plot(1:L, d_iter, 'r');
     title(str);
     ylabel('Distorsion');
- 
-%     pause();
+    
+    %     pause();
 end
 
 
 
 
-f1 = 0:25:2000;
-f2 = 0:25:2000;
+f1 = 0:5:2000;
+f2 = 0:5:2000;
 [F1,F2] = meshgrid(f1,f2);
 
 %%
@@ -121,7 +121,7 @@ f2 = 0:25:2000;
 z = cell(1,K);
 
 for k=1:K
-
+    
     u_k = u(k,:);
     sigma_k = calcular_sigma(xk{k},u_k);
     pi_k = 1/3;
@@ -133,13 +133,13 @@ for k=1:K
         y = F2(i);
         z{k}(i) = g_k(x,y,sigma_k,u_k, pi_k);
     end
-
+    
     figure;
     size(z{k})
     surf(F1,F2,z{k},'EdgeColor','none');
     xlabel('x');
     ylabel('y');
-	zlabel('z');
+    zlabel('z');
     view(2)
     
 end
@@ -149,35 +149,35 @@ clas = zeros(size(F1));
 
 
 for i=1:numel(F1)
-        v = zeros(1,K);
-        
-        for k=1:K
-            v(k) = z{k}(i);
-        end
-        
-        [m,clas(i)] = max(v);
+    v = zeros(1,K);
+    
+    for k=1:K
+        v(k) = z{k}(i);
+    end
+    
+    [m,clas(i)] = max(v);
 end
 
-    figure;
-    h = surf(F1,F2,clas,'EdgeColor','none');
-    xlabel('x');
-    ylabel('y');
-	zlabel('z');
-    view(2)
-    hold on
-    
-    
-    hold on
-    z = get(h,'ZData');
-    set(h,'ZData',z-4)  
-    
-    for z=1:K
-        plot(u(z,1),u(z,2),'o','color',col(z),'markersize',10,'markerfacecolor',col(z));
-        hold on;
-        plot(xk{z}(:, 1), xk{z}(:, 2), 'o','color',col(z));
-        hold on;
-    end
+figure;
+h = surf(F1,F2,clas,'EdgeColor','none');
+xlabel('x');
+ylabel('y');
+zlabel('z');
+view(2)
+hold on
 
-    xlabel('F1 [Hz]');
-    ylabel('F2 [Hz]');
-    title('Last figure');
+
+hold on
+z = get(h,'ZData');
+set(h,'ZData',z-4)
+
+for z=1:K
+    plot(u(z,1),u(z,2),'o','color',col(z),'markersize',10,'markerfacecolor',col(z));
+    hold on;
+    plot(xk{z}(:, 1), xk{z}(:, 2), 'o','color',col(z));
+    hold on;
+end
+
+xlabel('F1 [Hz]');
+ylabel('F2 [Hz]');
+title('Last figure');
