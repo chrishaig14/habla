@@ -4,81 +4,92 @@ us = load('u.txt');
 
 c = {as, os, us};
 
-col = ['r', 'g', 'b']; % colores para los graficos, uno para cada clase
+legends = ['a';'o';'u'];
+colors = {[1,0,0],[0,1,0],[0,0,1]};
+
+f1_min = 0;
+f1_max = 1500;
+f2_min = 0;
+f2_max = 1800;
 
 K = length(c); % cantidad de clases
 
 %% mezclar
 
-for i = 1:K
-    c{i} = shuffle(c{i});
+for k = 1:K
+    c{k} = shuffle(c{k});
 end
 
 %% me quedo con N muestras y sólo los 2 primeros formantes
 
 f = cell(1, K);
+t = cell(1,K);
 
 N = 40;
 
-for i = 1:K
-    f{i} = c{i}(1:N, 1:2);
+for k = 1:K
+    f{k} = c{k}(1:N, 1:2);
+    t{k} = c{k}(N+1:end,1:2);
 end
 
 %% tomo M de cada clase y calculo las medias iniciales
 
-M = 10;
+M = 1; % con M más grande es muy "fácil"
 
 u = zeros(K, 2);
-for i = 1:K
-    u(i, :) = mean(f{i}(1:M, :), 1);
+for k = 1:K
+    u(k, :) = mean(f{k}(1:M, :), 1);
+    u(k,:)
 end
 
 %% L iteraciones
 
-k = zeros(1, K * N); % supongo que hay N muestras para cada clase
+c = zeros(1, K * N); % supongo que hay N muestras para cada clase
 
-x = zeros(K * N, 2);
+xs = zeros(K * N, 2);
 
-% pongo todas las muestras juntas
+% pongo todas las muestras juntas en xs
 
-for i = 1:K
-    x((i-1)*N + 1:(i-1)*N + N, :) = f{i};
+for k = 1:K
+    xs((k-1)*N + 1:(k-1)*N + N, :) = f{k};
 end
 
 %%
-L = 15;
-f_form = figure;
-f_d = figure;
+L = 15; % L : cantidad de iteraciones
+
+f_form = figure; % fig de formantes
+f_d = figure; % fig de distorsion
+
 d_iter = zeros(1, L); % distorsion total para cada iteracion
 
 for j = 1:L
     d = zeros(1,K); % distorsion para cada clase
-    for i = 1:length(x)
+    for i = 1:length(xs)
         dist = zeros(1,K);
-        for z=1:K
-            dist(z) = (x(i, :) - u(z,:)) * (x(i, :) - u(z,:))'; % distancia a la media
+        for k=1:K
+            dist(k) = (xs(i, :) - u(k,:)) * (xs(i, :) - u(k,:))'; % distancia a la media
         end
         [m,l] = min(dist);
-        k(i) = l;
+        c(i) = l;
         d(l) = d(l) + m;
     end
     d_iter(j) = sum(d);
     
-    xk = cell(1,K);
+    x_k = cell(1,K);
     
-    fprintf('Interacion %i\n',j);
+    fprintf('K-Means Iteracion %i\n',j);
     
-    for z=1:K
-        xk{z} = x(k==z,:); % x clasificados con la clase z en xk{z}
-        fprintf('Total clase %i: %i\n',z,sum(k==z));
+    for k=1:K
+        x_k{k} = xs(c==k,:); % xs clasificados con la clase k en x_k{k}
+        fprintf('Total clase %i: %i\n',k,sum(c==k));
     end
     
     fprintf('\n');
     
     % calculo las nuevas medias
     
-    for z = 1:K
-        u(z, :) = mean(xk{z}, 1);
+    for k = 1:K
+        u(k, :) = mean(x_k{k}, 1);
     end
     
     % graficos
@@ -86,17 +97,25 @@ for j = 1:L
     figure(f_form);
     clf;
     
-    for z=1:K
-        plot(u(z,1),u(z,2),'o','color',col(z),'markersize',10,'markerfacecolor',col(z));
-        hold on;
-        plot(xk{z}(:, 1), xk{z}(:, 2), 'o','color',col(z));
+    for k=1:K
+        plot(u(k,1),u(k,2),'o','color',colors{k},'markersize',10,'markerfacecolor',colors{k});
         hold on;
     end
     
+    for k=1:K
+        plot(x_k{k}(:, 1), x_k{k}(:, 2), 'o','color',colors{k});
+        hold on;
+    end
+    
+    
     xlabel('F1 [Hz]');
     ylabel('F2 [Hz]');
+    xlim([f1_min, f1_max])
+    ylim([f2_min, f2_max])
     
-    str = sprintf('Iteracion %i', j);
+    legend(legends);
+    
+    str = sprintf('K-Means Iteracion %i', j);
     title(str);
     
     
@@ -106,10 +125,8 @@ for j = 1:L
     title(str);
     ylabel('Distorsion');
     
-    %     pause();
+    pause(0.5);
 end
-
-
 
 
 f1 = 0:5:2000;
@@ -120,33 +137,53 @@ f2 = 0:5:2000;
 
 z = cell(1,K);
 
+sigma_k = cell(1,K);
+det_sigma_k = zeros(1,K);
+inv_sigma_k = cell(1,K);
+surf_k = [];
 for k=1:K
     
     u_k = u(k,:);
-    sigma_k = calcular_sigma(xk{k},u_k);
+    sigma_k{k} = calcular_sigma(x_k{k},u_k);
     pi_k = 1/3;
     z{k} = zeros(size(F1));
-    sigma_k
-    u_k
+    
+    det_sigma_k(k) = det(sigma_k{k}); % calculo esto acá en vez de en g_k
+    inv_sigma_k{k} = inv(sigma_k{k}); % así tarda menos
+    
     for i=1:numel(F1)
         x = F1(i);
         y = F2(i);
-        z{k}(i) = g_k(x,y,sigma_k,u_k, pi_k);
+        z{k}(i) = g_k(x,y,det_sigma_k(k),inv_sigma_k{k},u_k, pi_k);
     end
     
-    figure;
-    size(z{k})
+    surf_k(k) = figure;
     surf(F1,F2,z{k},'EdgeColor','none');
-    xlabel('x');
-    ylabel('y');
-    zlabel('z');
-    view(2)
+    xlabel('F1 [Hz]');
+    ylabel('F2 [Hz]');
+    view(2);
+    str = sprintf('g_k, k = %i (%s)',k,legends(k));
+    xlim([f1_min, f1_max])
+    ylim([f2_min, f2_max])
+    title(str);
     
 end
 
+% esto es para poner el colormap en la misma escala para todos
+
+zz = cell2mat(z);
+zz = reshape(zz,1,numel(zz));
+min_g_k = min(zz);
+max_g_k = max(zz);
+
+for k=1:K
+    figure(surf_k(k));
+    caxis([min_g_k, max_g_k]);
+    colormap jet
+end
+
+
 clas = zeros(size(F1));
-
-
 
 for i=1:numel(F1)
     v = zeros(1,K);
@@ -160,24 +197,88 @@ end
 
 figure;
 h = surf(F1,F2,clas,'EdgeColor','none');
-xlabel('x');
-ylabel('y');
-zlabel('z');
-view(2)
-hold on
+view(2);
 
+xlim([f1_min, f1_max])
+ylim([f2_min, f2_max])
+map = reshape(cell2mat(colors),K,3);
 
-hold on
-z = get(h,'ZData');
-set(h,'ZData',z-4)
+colormap(map);
 
-for z=1:K
-    plot(u(z,1),u(z,2),'o','color',col(z),'markersize',10,'markerfacecolor',col(z));
-    hold on;
-    plot(xk{z}(:, 1), xk{z}(:, 2), 'o','color',col(z));
+% esto es un truco para que aparezca la leyenda en el surf
+
+hold on;
+
+plot_k = [];
+for k=1:K
+    plot_k(k) = plot(x_k{k}(1,1),x_k{k}(1,2),'o','color',colors{k}, 'markerfacecolor',colors{k});
     hold on;
 end
 
-xlabel('F1 [Hz]');
-ylabel('F2 [Hz]');
-title('Last figure');
+legend(plot_k,legends);
+title('Región para cada clase');
+
+%% test
+
+xs = [];
+
+% pongo todas las muestras juntas
+
+for k = 1:K
+    xs = [xs;t{k}];
+end
+
+% ws: clase REAL 1..K a la que pertenece cada muestra
+
+ws = [];
+
+for k=1:K
+    ws = [ws , ones(1,length(t{k}))*k];
+end
+
+% c: clase PREDICHA 1..K para cada muestra
+
+c = zeros(1,length(xs));
+
+for i = 1: length(xs)
+    x = xs(i,:);
+    
+    % p_x(k) = p(k|x)
+    
+    p_x = zeros(1,K);
+    
+    for k=1:K
+        p_x(k) = g_k(x(1),x(2),det_sigma_k(k), inv_sigma_k{k},u(k,:),p(k));
+    end
+    
+    [m,k_max] = max(p_x);
+    
+    c(i) = k_max;
+end
+
+%% graficos
+
+% x_k{k} muestras clasificadas para la clase k
+
+x_k = cell(1,K);
+
+for k=1:K
+    x_k{k} = xs(c==k,:);
+end
+
+figure;
+
+for k=1:K
+    plot(x_k{k}(:,1),x_k{k}(:,2),'o','color',colors{k});
+    hold on;
+end
+    xlim([f1_min, f1_max])
+    ylim([f2_min, f2_max])
+    
+legend(legends);
+
+title('Resultados test');
+
+
+%% calcular error como #clasificaciones correctas/#total muestras
+fprintf('Error: %0.2f %% \n', sum(ws ~= c)/length(xs)*100);

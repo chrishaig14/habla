@@ -2,10 +2,16 @@ as = load('a.txt');
 os = load('o.txt');
 us = load('u.txt');
 
-c = {us,os,as};
+c = {as, os, us};
 
-legends = ['u';'o';'a'];
+legends = ['a';'o';'u'];
 colors = {[1,0,0],[0,1,0],[0,0,1]};
+
+f1_min = 0;
+f1_max = 1500;
+f2_min = 0;
+f2_max = 1800;
+
 
 %% K : cantidad de clases
 
@@ -27,11 +33,11 @@ n_t = 0;% # test
 
 N = 40;
 
-for i = 1:K
-    f{i} = c{i}(1:N, 1:2);
-    n_f = n_f + length(f{i});
-    t{i} = c{i}(N+1:end,1:2);
-    n_t = n_t + length(t{i});
+for k = 1:K
+    f{k} = c{k}(1:N, 1:2);
+    n_f = n_f + length(f{k});
+    t{k} = c{k}(N+1:end,1:2);
+    n_t = n_t + length(t{k});
 end
 
 %% graficar primeros dos formantes
@@ -42,7 +48,9 @@ for k=1:K
     hold on;
 end
 legend(legends);
-
+    xlim([f1_min, f1_max])
+    ylim([f2_min, f2_max])
+    
 title("Datos entrenamiento");
 
 % figure;
@@ -157,7 +165,9 @@ for k=1:K
     plot(x_k{k}(:,1),x_k{k}(:,2),'o','color',colors{k});
     hold on;
 end
-
+    xlim([f1_min, f1_max])
+    ylim([f2_min, f2_max])
+    
 legend(legends);
 
 title('Resultados test');
@@ -188,9 +198,14 @@ for k=1:K
     ylabel('y');
     zlabel('z');
     view(2)
+        xlim([f1_min, f1_max])
+    ylim([f2_min, f2_max])
+    
     str = sprintf('g_k para k=%i (%s)',k,legends(k));
     title(str)
 end
+
+% esto es para poner el colormap en la misma escala para todos
 
 zz = cell2mat(z);
 zz = reshape(zz,1,numel(zz));
@@ -223,6 +238,9 @@ figure;
 h = surf(F1,F2,clas,'EdgeColor','none');
 xlabel('F1 [Hz]');
 ylabel('F2 [Hz]');
+    xlim([f1_min, f1_max])
+    ylim([f2_min, f2_max])
+    
 view(2)
 
 title('Region para cada clase');
