@@ -81,10 +81,10 @@ end
 
 %% calcular sigma_k para cada clase y después hacer el promedio para sigma total
 
-sigmas = cell(1,K);
+sigma_k = cell(1,K);
 
 for k=1:K
-    sigmas{k} = calcular_sigma(f{k},u(k,:));
+    sigma_k{k} = calcular_sigma(f{k},u(k,:));
 end
 
 % calculo la probabilidad de cada clase como # muestras total clase / # muestras total
@@ -104,7 +104,7 @@ p = p*1/total;
 sigma = zeros(2,2);
 
 for k=1:K
-    sigma = sigma + p(k)*sigmas{k};
+    sigma = sigma + p(k)*sigma_k{k};
 end
 
 
@@ -258,5 +258,38 @@ for k=1:K
     plot_k(k) = plot(x_k{k}(1,1),x_k{k}(1,2),'o','color',colors{k}, 'markerfacecolor',colors{k});
     hold on;
 end
+
+legend(plot_k,legends);
+
+
+%% graficar elipses de varianza
+N = 50;
+t = [0:2*pi/(N-1):2*pi];
+y1 = sin(t);
+y2 = cos(t);
+
+y = [y1;y2];
+
+e = cell(1,K);
+
+x = cell(1,K);
+
+figure;
+
+plot_k = [];
+
+for k=1:K
+    e{k} = chol(sigma_k{k});
+    x{k} = e{k}'*y;
+    for i=1:length(x{k})
+        x{k}(:,i) = x{k}(:,i) + u(k,:)';
+    end
+    plot_k(k) = plot(x{k}(1,:),x{k}(2,:),'color',colors{k});
+    hold on;
+    plot(f{k}(:,1),f{k}(:,2),'o','color',colors{k});
+    hold on;
+end
+
+title('Varianza para cada clase')
 
 legend(plot_k,legends);
