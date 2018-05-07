@@ -22,7 +22,7 @@ end
 
 %% me quedo con N muestras y sólo los 2 primeros formantes
 
-f = cell(1, K);
+f = cell(1,K);
 t = cell(1,K);
 
 N = 40;
@@ -55,30 +55,34 @@ plot(u(1),u(2),'*');
 %figure;
 
 
-K = 7;
-colors = {'r','g','b','k','m','y','c'};
+% K = 3;
+% colors = {'r','g','b','k','m','y','c'};
+%
+% todos = zeros(1000,2);
+%
+% for i=1:length(todos)
+%     todos(i,1) = rand()*(f1_max-f1_min)+f1_min;
+%     todos(i,2) = rand()*(f2_max-f2_min)+f2_min;
+% end
 
-todos = zeros(1000,2);
-
-for i=1:length(todos)
-    todos(i,1) = rand()*(f1_max-f1_min)+f1_min;
-    todos(i,2) = rand()*(f2_max-f2_min)+f2_min;
-end
-
+sec = figure;
+%%
 
 theta = rand()*2*pi/K; % medido desde la horizontal en u
 
-figure;
+theta
+
+
+figure(sec);
 plot(u(1),u(2),'*');
 hold on;
-
 
 
 thetas = [theta:2*pi/K:theta + 2*pi/K*(K-1)];
 
 thetas = wrapTo2Pi(thetas);
 
-
+xk = cell(1,K);
 
 for i=1:length(todos)
     x_o = todos(i,:); % un punto
@@ -95,7 +99,8 @@ for i=1:length(todos)
         angulo = wrapTo2Pi(angulo);
         fin = wrapTo2Pi(fin);
         if angulo < fin
-            plot(x_o(1),x_o(2),'o', 'color', colors{k});
+            xk{k} = [xk{k};x_o];
+            %plot(x_o(1),x_o(2),'o', 'color', colors{k});
         end
     end
     angulo = angulo2pi - thetas(K);
@@ -103,11 +108,17 @@ for i=1:length(todos)
     angulo = wrapTo2Pi(angulo);
     fin = wrapTo2Pi(fin);
     if angulo < fin
-        plot(x_o(1),x_o(2),'o', 'color', colors{K});
+        xk{K} = [xk{K};x_o];
+        %         plot(x_o(1),x_o(2),'o', 'color', colors{K});
     end
     
     hold on;
 end
+for k=1:K
+    plot(xk{k}(:,1),xk{k}(:,2),'o', 'color', colors{k});
+    hold on;
+end
+
 xlabel('F1 [Hz]');
 ylabel('F2 [Hz]');
 str = sprintf("%0.1f", 360/K);
@@ -115,38 +126,20 @@ title(str);
 xlim([f1_min, f1_max])
 ylim([f2_min, f2_max])
 
-    
-% 
-% 
-% 
-% 
-% r = [0:100];
-%  
-% y = r*sin(theta);
-% x = r*cos(theta);
-% 
-% figure;
-% plot(x, y,'r');
-% str = sprintf('%0.2f', theta*360/2/pi);
-% title(str);
-% daspect([1 1 1])
-% 
-% 
-% CosTheta = dot(u,xx)/(norm(u)*norm(xx));
-% ThetaInDegrees = acosd(CosTheta);
-% 
 
 
-
-%% 
+%%
 
 %M = 1; % con M más grande es muy "fácil"
 
 u = zeros(K, 2);
 for k = 1:K
-    u(k, :) = mean(f{k}(1:M, :), 1);
-    u(k,:)
+    %u(k, :) = mean(f{k}(1:M, :), 1);
+    u(k, :) = mean(xk{k}, 1);
+    %u(k,:)
 end
+
+%%
 
 %% L iteraciones
 
@@ -234,6 +227,17 @@ for j = 1:L
     pause(0.5);
 end
 
+% p(k) probabilidad de la clase k
+
+p = zeros(1,K);
+
+for k=1:K
+    p(k) = length(x_k{k});
+end
+
+p = p/sum(p);
+
+%
 
 f1 = 0:5:2000;
 f2 = 0:5:2000;
@@ -251,7 +255,7 @@ for k=1:K
     
     u_k = u(k,:);
     sigma_k{k} = calcular_sigma(x_k{k},u_k);
-    pi_k = 1/3;
+    
     z{k} = zeros(size(F1));
     
     det_sigma_k(k) = det(sigma_k{k}); % calculo esto acá en vez de en g_k
@@ -260,7 +264,7 @@ for k=1:K
     for i=1:numel(F1)
         x = F1(i);
         y = F2(i);
-        z{k}(i) = g_k(x,y,det_sigma_k(k),inv_sigma_k{k},u_k, pi_k);
+        z{k}(i) = g_k(x,y,det_sigma_k(k),inv_sigma_k{k},u_k, p(k));
     end
     
     surf_k(k) = figure;
@@ -378,9 +382,9 @@ for k=1:K
     plot(x_k{k}(:,1),x_k{k}(:,2),'o','color',colors{k});
     hold on;
 end
-    xlim([f1_min, f1_max])
-    ylim([f2_min, f2_max])
-    
+xlim([f1_min, f1_max])
+ylim([f2_min, f2_max])
+
 legend(legends);
 
 title('Resultados test');

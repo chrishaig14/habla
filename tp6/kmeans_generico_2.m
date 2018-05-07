@@ -128,6 +128,18 @@ for j = 1:L
     pause(0.5);
 end
 
+% p(k) probabilidad de la clase k
+
+p = zeros(1,K);
+
+for k=1:K
+    p(k) = length(x_k{k});
+end
+
+p = p/sum(p);
+
+%
+
 
 f1 = 0:5:2000;
 f2 = 0:5:2000;
@@ -145,7 +157,7 @@ for k=1:K
     
     u_k = u(k,:);
     sigma_k{k} = calcular_sigma(x_k{k},u_k);
-    pi_k = 1/3;
+    
     z{k} = zeros(size(F1));
     
     det_sigma_k(k) = det(sigma_k{k}); % calculo esto acá en vez de en g_k
@@ -154,7 +166,7 @@ for k=1:K
     for i=1:numel(F1)
         x = F1(i);
         y = F2(i);
-        z{k}(i) = g_k(x,y,det_sigma_k(k),inv_sigma_k{k},u_k, pi_k);
+        z{k}(i) = g_k(x,y,det_sigma_k(k),inv_sigma_k{k},u_k, p(k));
     end
     
     surf_k(k) = figure;
