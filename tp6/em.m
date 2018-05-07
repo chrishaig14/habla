@@ -34,10 +34,11 @@ end
 
 %% valores iniciales
 
-%p_k inicial => equiprobable
-
-p_k = ones(1,K)*1/K;
-
+p_k = zeros(1,K);
+for k=1:K
+    p_k(k) = length(f{k});
+end
+p_k = p_k/sum(p_k);
 
 % u_k inicial => tomo M de cada clase y calculo la media
 
