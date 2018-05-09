@@ -81,7 +81,7 @@ NN = length(xs);
 %%
 
 p_x = zeros(1,NN);
-II = 50;
+II = 40;
 LL = zeros(1,II);
 
 fig_x = figure;
@@ -145,7 +145,7 @@ for iter = 1:II
     xlabel('Iteracion');
     
     fprintf('Proxima iteracion ...\n');
-    pause();
+    pause(0.1);
     
 end
 
@@ -169,45 +169,37 @@ end
 
 % c: clase PREDICHA 1..K para cada muestra
 
-c = zeros(1,length(xs));
+c = clasificar_em(xs,u,sigma,p_k, K);
 
-for i = 1: length(xs)
-    x = xs(i,:);
-    gamma_k = zeros(K);
-    for k=1:K
-        gamma_k(k) = mvnpdf(xs(i,:),u(k,:),sigma{k})*p_k(k);
-    end
-    p_x = sum(gamma_k);
-    gamma_k = gamma_k/p_x;
-    
-    [m,k_max] = max(gamma_k);
-    
-    c(i) = k_max;
-end
-
-%% graficos
-
-% x_k{k} muestras clasificadas para la clase k
-
-x_k = cell(1,K);
-
-for k=1:K
-    x_k{k} = xs(c==k,:);
-end
-
-figure;
-
-for k=1:K
-    plot(x_k{k}(:,1),x_k{k}(:,2),'o','color',colors{k});
-    hold on;
-end
-xlim([f1_min, f1_max])
-ylim([f2_min, f2_max])
-
-legend(legends);
-
-title('Resultados test');
-
+% c = zeros(1,length(xs));
+% 
+% for i = 1: length(xs)
+%     x = xs(i,:);
+%     gamma_k = zeros(K);
+%     for k=1:K
+%         gamma_k(k) = mvnpdf(xs(i,:),u(k,:),sigma{k})*p_k(k);
+%     end
+%     p_x = sum(gamma_k);
+%     gamma_k = gamma_k/p_x;
+%     
+%     [m,k_max] = max(gamma_k);
+%     
+%     c(i) = k_max;
+% end
 
 %% calcular error como #clasificaciones correctas/#total muestras
 fprintf('Error: %0.2f %% \n', sum(ws ~= c)/length(xs)*100);
+%% grafico
+
+figure;
+
+% resultados de test
+graficar_muestras(xs,c,'o',legends, colors, f1_min, f1_max, f2_min, f2_max, K);
+
+hold on
+
+% clasificación correcta
+graficar_muestras(xs,ws,'x',legends, colors, f1_min, f1_max, f2_min, f2_max, K);
+
+title('Test (o) y correcta (x)');
+
