@@ -81,7 +81,7 @@ NN = length(xs);
 %%
 
 p_x = zeros(1,NN);
-II = 40;
+II = 30;
 LL = zeros(1,II);
 
 fig_x = figure;
@@ -171,21 +171,6 @@ end
 
 c = clasificar_em(xs,u,sigma,p_k, K);
 
-% c = zeros(1,length(xs));
-% 
-% for i = 1: length(xs)
-%     x = xs(i,:);
-%     gamma_k = zeros(K);
-%     for k=1:K
-%         gamma_k(k) = mvnpdf(xs(i,:),u(k,:),sigma{k})*p_k(k);
-%     end
-%     p_x = sum(gamma_k);
-%     gamma_k = gamma_k/p_x;
-%     
-%     [m,k_max] = max(gamma_k);
-%     
-%     c(i) = k_max;
-% end
 %% calcular error como #clasificaciones correctas/#total muestras
 fprintf('Error: %0.2f %% \n', sum(ws ~= c)/length(xs)*100);
 %% grafico

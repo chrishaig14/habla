@@ -1,4 +1,4 @@
-function [ clasif ] = corregir_etiquetas( ws, c , K)
+function [ perm ] = corregir_etiquetas( ws, c , K)
     %fprintf('Error: %0.2f %% \n', sum(ws ~= c)/length(xs)*100);
 
     permutaciones = perms(1:K);
@@ -30,6 +30,8 @@ function [ clasif ] = corregir_etiquetas( ws, c , K)
 
     %clasif(i) = permutaciones(n_min,c(i));
     clasif = permutaciones(n_min,c);
+    
+    perm = permutaciones(n_min,:);
 
     %      end
 

@@ -115,7 +115,7 @@ NN = length(xs);
 %% entrenamiento
 
 p_x = zeros(1,NN); % probabilidad de cada muestra, p(x)
-II = 40; % numero de iteraciones
+II = 30; % numero de iteraciones
 LL = zeros(1,II); % valores de log likelihood para cada iteracion
 
 fig_x = figure;
@@ -216,45 +216,51 @@ end
 
 c = clasificar_em(xs,u,sigma,p_k, K);
 
-
-% c = zeros(1,length(xs));
-
-% for i = 1: length(xs)
-%     x = xs(i,:);
-%     gamma_k = zeros(K);
-%     for k=1:K
-%         gamma_k(k) = mvnpdf(xs(i,:),u(k,:),sigma{k})*p_k(k);
-%     end
-%     p_x = sum(gamma_k);
-%     gamma_k = gamma_k/p_x;
-%     
-%     [m,k_max] = max(gamma_k);
-%     
-%     c(i) = k_max;
-% end
-
-
 %% calcular error como #clasificaciones correctas/#total muestras
 fprintf('Error: %0.2f %% \n', sum(ws ~= c)/length(xs)*100);
 
-clasif = corregir_etiquetas(ws,c, K);
+perm = corregir_etiquetas(ws,c, K);
 
-fprintf('Error: %0.2f %% \n', sum(ws ~= clasif)/length(xs)*100);
+c = perm(c);
+
+% % arreglo los colores
+% colors_n = cell(1,K);
+% for k=1:K
+%     colors_n{k} = colors{perm(k)};
+% end
+% 
+% legends = legends(perm);
+
+
+fprintf('Error: %0.2f %% \n', sum(ws ~= c)/length(xs)*100);
 
 %% grafico
 
 figure;
 
-% resultados de test
-graficar_muestras(xs,clasif,'o',legends, colors, f1_min, f1_max, f2_min, f2_max, K);
-
-hold on
-
 % clasificación correcta
 graficar_muestras(xs,ws,'x',legends, colors, f1_min, f1_max, f2_min, f2_max, K);
 
+hold on
+
+% resultados de test
+graficar_muestras(xs,c,'o',legends, colors, f1_min, f1_max, f2_min, f2_max, K);
+
 title('Test (o) y correcta (x)');
 
+%% Graficar regiones EM
 
+[colors_c, F1, F2] = colores_em(f1_min, f1_max, f2_min, f2_max,5, u, sigma, p_k, K, colors);
+
+%%
+
+figure;
+surf(F1,F2,zeros(size(F1)),colors_c,'EdgeColor','none');
+xlabel('F1 [Hz]');
+ylabel('F2 [Hz]');
+view(2);
+xlim([f1_min, f1_max])
+ylim([f2_min, f2_max])
+title('Regiones');
 
 

@@ -276,12 +276,13 @@ fprintf('Error: %0.2f %% \n', sum(ws ~= c)/length(xs)*100);
 
 figure;
 
-% resultados de test
-graficar_muestras(xs,c,'o',legends, colors, f1_min, f1_max, f2_min, f2_max, K);
-
-hold on
 
 % clasificación correcta
 graficar_muestras(xs,ws,'x',legends, colors, f1_min, f1_max, f2_min, f2_max, K);
+
+hold on
+
+% resultados de test
+graficar_muestras(xs,c,'o',legends, colors, f1_min, f1_max, f2_min, f2_max, K);
 
 title('Test (o) y correcta (x)');
