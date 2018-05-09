@@ -186,7 +186,6 @@ c = clasificar_em(xs,u,sigma,p_k, K);
 %     
 %     c(i) = k_max;
 % end
-
 %% calcular error como #clasificaciones correctas/#total muestras
 fprintf('Error: %0.2f %% \n', sum(ws ~= c)/length(xs)*100);
 %% grafico
@@ -203,3 +202,17 @@ graficar_muestras(xs,ws,'x',legends, colors, f1_min, f1_max, f2_min, f2_max, K);
 
 title('Test (o) y correcta (x)');
 
+%% Graficar regiones EM
+
+[colors_c, F1, F2] = colores_em(f1_min, f1_max, f2_min, f2_max, 5, u, sigma, p_k, K, colors);
+
+%%
+
+figure;
+surf(F1,F2,zeros(size(F1)),colors_c,'EdgeColor','none');
+xlabel('F1 [Hz]');
+ylabel('F2 [Hz]');
+view(2);
+xlim([f1_min, f1_max])
+ylim([f2_min, f2_max])
+title('Regiones');
