@@ -34,98 +34,13 @@ end
 
 %% media
 
-%calculo la media general
-
 todos = [];
 
 for k = 1:K
     todos = [todos;f{k}];
 end
-% 
-% u = mean(todos,1);
-% 
-% figure;
-% plot(todos(:,1),todos(:,2),'o');
-% hold on;
-% plot(u(1),u(2),'*');
 
-
-%%
-
-%figure;
-
-
-% K = 3;
-% colors = {'r','g','b','k','m','y','c'};
-%
-% todos = zeros(1000,2);
-%
-% for i=1:length(todos)
-%     todos(i,1) = rand()*(f1_max-f1_min)+f1_min;
-%     todos(i,2) = rand()*(f2_max-f2_min)+f2_min;
-% end
-
-% sec = figure;
-% %%
-% 
-% theta = rand()*2*pi/K; % medido desde la horizontal en u
-% 
-% theta
-% 
-% 
-% figure(sec);
-% plot(u(1),u(2),'*');
-% hold on;
-% 
-% 
-% thetas = [theta:2*pi/K:theta + 2*pi/K*(K-1)];
-% 
-% thetas = wrapTo2Pi(thetas);
-% 
-% xk = cell(1,K);
-% 
-% for i=1:length(todos)
-%     x_o = todos(i,:); % un punto
-%     
-%     % lo llevo hasta u
-%     
-%     x = x_o - u;
-%     
-%     angulo2pi = wrapTo2Pi(atan2(x(2),x(1))); % angulo entre x y u, desde la horizontal
-%     
-%     for k = 1:K-1
-%         angulo = angulo2pi - thetas(k);
-%         fin = thetas(k+1) - thetas(k);
-%         angulo = wrapTo2Pi(angulo);
-%         fin = wrapTo2Pi(fin);
-%         if angulo < fin
-%             xk{k} = [xk{k};x_o];
-%             %plot(x_o(1),x_o(2),'o', 'color', colors{k});
-%         end
-%     end
-%     angulo = angulo2pi - thetas(K);
-%     fin = thetas(1) - thetas(K);
-%     angulo = wrapTo2Pi(angulo);
-%     fin = wrapTo2Pi(fin);
-%     if angulo < fin
-%         xk{K} = [xk{K};x_o];
-%         %         plot(x_o(1),x_o(2),'o', 'color', colors{K});
-%     end
-%     
-%     hold on;
-% end
-% for k=1:K
-%     plot(xk{k}(:,1),xk{k}(:,2),'o', 'color', colors{k});
-%     hold on;
-% end
-% 
-% xlabel('F1 [Hz]');
-% ylabel('F2 [Hz]');
-% str = sprintf('%0.1f', 360/K);
-% title(str);
-% xlim([f1_min, f1_max])
-% ylim([f2_min, f2_max])
-
+%% seccionar 
 
 [xk,u, theta] = seccionar(todos, K);
 
@@ -149,16 +64,10 @@ title(str);
 
 %%
 
-%M = 1; % con M más grande es muy "fácil"
-
 u = zeros(K, 2);
 for k = 1:K
-    %u(k, :) = mean(f{k}(1:M, :), 1);
     u(k, :) = mean(xk{k}, 1);
-    %u(k,:)
 end
-
-%%
 
 %% L iteraciones
 
@@ -386,41 +295,8 @@ for i = 1: length(xs)
 end
 
 %% calcular error como #clasificaciones correctas/#total muestras
+
 fprintf('Error: %0.2f %% \n', sum(ws ~= c)/length(xs)*100);
-
-% permutaciones = perms(1:K);
-% nperms = size(permutaciones,1);
-% errores = zeros(1,nperms);
-% 
-% for n = 1:nperms
-%     
-%     clasif = zeros(1,length(xs));
-%     
-%     for i=1:length(xs)
-%         
-%         clasif(i) = permutaciones(n,c(i));
-%         
-%     end
-%     
-%     errores(n) = sum(ws ~= clasif);
-% 
-% end
-% 
-% [error_min, n_min] = min(errores);
-% 
-% %errores
-% 
-% 
-
-%     clasif = zeros(1,length(xs));
-%     
-%     for i=1:length(xs)
-%         
-%         clasif(i) = permutaciones(n_min,c(i));
-%         
-%     end
-%     
-%     nuevo_error = sum(ws ~= clasif);
 
 clasif = corregir_etiquetas(ws,c, K);
 
