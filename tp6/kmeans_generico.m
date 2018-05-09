@@ -302,50 +302,20 @@ clasif = corregir_etiquetas(ws,c, K);
 
 fprintf('Error: %0.2f %% \n', sum(ws ~= clasif)/length(xs)*100);
 
-%% graficos
-
-% x_k{k} muestras clasificadas para la clase k
-
-x_k = cell(1,K);
-
-for k=1:K
-    x_k{k} = xs(clasif==k,:);
-end
+%% grafico
 
 figure;
 
-for k=1:K
-    plot(x_k{k}(:,1),x_k{k}(:,2),'o','color',colors{k});
-    hold on;
-end
-xlim([f1_min, f1_max])
-ylim([f2_min, f2_max])
+% resultados de test
+graficar_muestras(xs,clasif,'o',legends, colors, f1_min, f1_max, f2_min, f2_max, K);
 
-legend(legends);
+hold on
 
-title('Resultados test');
+% clasificación correcta
+graficar_muestras(xs,ws,'x',legends, colors, f1_min, f1_max, f2_min, f2_max, K);
 
-%% graficos con las clasificaciones correctas
+title('Test (o) y correcta (x)');
 
-% x_k{k} muestras clasificadas para la clase k
 
-x_k = cell(1,K);
-
-for k=1:K
-    x_k{k} = xs(ws==k,:);
-end
-
-figure;
-
-for k=1:K
-    plot(x_k{k}(:,1),x_k{k}(:,2),'o','color',colors{k});
-    hold on;
-end
-xlim([f1_min, f1_max])
-ylim([f2_min, f2_max])
-
-legend(legends);
-
-title('Clasificacion correcta');
 
 
