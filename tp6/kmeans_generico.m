@@ -385,6 +385,47 @@ for i = 1: length(xs)
     c(i) = k_max;
 end
 
+%% calcular error como #clasificaciones correctas/#total muestras
+fprintf('Error: %0.2f %% \n', sum(ws ~= c)/length(xs)*100);
+
+% permutaciones = perms(1:K);
+% nperms = size(permutaciones,1);
+% errores = zeros(1,nperms);
+% 
+% for n = 1:nperms
+%     
+%     clasif = zeros(1,length(xs));
+%     
+%     for i=1:length(xs)
+%         
+%         clasif(i) = permutaciones(n,c(i));
+%         
+%     end
+%     
+%     errores(n) = sum(ws ~= clasif);
+% 
+% end
+% 
+% [error_min, n_min] = min(errores);
+% 
+% %errores
+% 
+% 
+
+%     clasif = zeros(1,length(xs));
+%     
+%     for i=1:length(xs)
+%         
+%         clasif(i) = permutaciones(n_min,c(i));
+%         
+%     end
+%     
+%     nuevo_error = sum(ws ~= clasif);
+
+clasif = corregir_etiquetas(ws,c, K);
+
+fprintf('Error: %0.2f %% \n', sum(ws ~= clasif)/length(xs)*100);
+
 %% graficos
 
 % x_k{k} muestras clasificadas para la clase k
@@ -392,7 +433,7 @@ end
 x_k = cell(1,K);
 
 for k=1:K
-    x_k{k} = xs(c==k,:);
+    x_k{k} = xs(clasif==k,:);
 end
 
 figure;
@@ -408,6 +449,27 @@ legend(legends);
 
 title('Resultados test');
 
+%% graficos con las clasificaciones correctas
 
-%% calcular error como #clasificaciones correctas/#total muestras
-fprintf('Error: %0.2f %% \n', sum(ws ~= c)/length(xs)*100);
+% x_k{k} muestras clasificadas para la clase k
+
+x_k = cell(1,K);
+
+for k=1:K
+    x_k{k} = xs(ws==k,:);
+end
+
+figure;
+
+for k=1:K
+    plot(x_k{k}(:,1),x_k{k}(:,2),'o','color',colors{k});
+    hold on;
+end
+xlim([f1_min, f1_max])
+ylim([f2_min, f2_max])
+
+legend(legends);
+
+title('Clasificacion correcta');
+
+

@@ -267,7 +267,7 @@ for iter = 1:II
     xlabel('Iteracion');
     
     fprintf('Proxima iteracion ...\n');
-    pause();
+    pause(0.1);
     
 end
 
@@ -311,38 +311,41 @@ end
 %% calcular error como #clasificaciones correctas/#total muestras
 fprintf('Error: %0.2f %% \n', sum(ws ~= c)/length(xs)*100);
 
-permutaciones = perms(1:K);
-nperms = size(permutaciones,1);
-errores = zeros(1,nperms);
+% permutaciones = perms(1:K);
+% nperms = size(permutaciones,1);
+% errores = zeros(1,nperms);
+% 
+% for n = 1:nperms
+%     
+%     clasif = zeros(1,length(xs));
+%     
+%     for i=1:length(xs)
+%         
+%         clasif(i) = permutaciones(n,c(i));
+%         
+%     end
+%     
+%     errores(n) = sum(ws ~= clasif);
+% 
+% end
+% 
+% [error_min, n_min] = min(errores);
+% 
+% %errores
+% 
+% 
 
-for n = 1:nperms
-    
-    clasif = zeros(1,length(xs));
-    
-    for i=1:length(xs)
-        
-        clasif(i) = permutaciones(n,c(i));
-        
-    end
-    
-    errores(n) = sum(ws ~= clasif);
+%     clasif = zeros(1,length(xs));
+%     
+%     for i=1:length(xs)
+%         
+%         clasif(i) = permutaciones(n_min,c(i));
+%         
+%     end
+%     
+%     nuevo_error = sum(ws ~= clasif);
 
-end
-
-[error_min, n_min] = min(errores);
-
-%errores
-
-
-    clasif = zeros(1,length(xs));
-    
-    for i=1:length(xs)
-        
-        clasif(i) = permutaciones(n_min,c(i));
-        
-    end
-    
-    nuevo_error = sum(ws ~= clasif);
+clasif = corregir_etiquetas(ws,c, K);
 
 fprintf('Error: %0.2f %% \n', sum(ws ~= clasif)/length(xs)*100);
 
