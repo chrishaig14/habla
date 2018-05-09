@@ -121,7 +121,7 @@ end
 
 xlabel('F1 [Hz]');
 ylabel('F2 [Hz]');
-str = sprintf("%0.1f", 360/K);
+str = sprintf('%0.1f', 360/K);
 title(str);
 xlim([f1_min, f1_max])
 ylim([f2_min, f2_max])

@@ -4,16 +4,20 @@ us = load('u.txt');
 
 c = {as, os, us};
 
+% leyenda para cada clase
 legends = ['a';'o';'u'];
+
+% un color para cada clase
 colors = {[1,0,0],[0,1,0],[0,0,1]};
 
+% limites para los graficos
 f1_min = 0;
 f1_max = 1500;
 f2_min = 0;
 f2_max = 1800;
 
-
-K = length(c); % cantidad de clases
+% cantidad de clases
+K = length(c);
 
 %% mezclar
 
@@ -34,20 +38,13 @@ end
 
 %% valores iniciales
 
-%p_k inicial => equiprobable
-
-p_k = ones(1,K)*1/K;
-
-%% media
-
-% calculo la media general
-
 todos = [];
 
 for k = 1:K
     todos = [todos;f{k}];
 end
 
+% calculo la media general
 u = mean(todos,1);
 
 figure;
@@ -55,34 +52,32 @@ plot(todos(:,1),todos(:,2),'o');
 hold on;
 plot(u(1),u(2),'*');
 
-
-%%
-
-%figure;
-
-
+%% esto es para generar muestras random y ver como quedan las secciones
+% 
+% figure;
+% 
 % K = 3;
 % colors = {'r','g','b','k','m','y','c'};
-%
-% todos = zeros(1000,2);
-%
+% 
+% todos = zeros(500,2);
+% 
 % for i=1:length(todos)
 %     todos(i,1) = rand()*(f1_max-f1_min)+f1_min;
 %     todos(i,2) = rand()*(f2_max-f2_min)+f2_min;
 % end
+% u = mean(todos,1);
 
 sec = figure;
-%%
+
+%% seccionar en K regiones con un angulo theta random
 
 theta = rand()*2*pi/K; % medido desde la horizontal en u
 
 theta
 
-
 figure(sec);
-plot(u(1),u(2),'*');
+plot(u(1),u(2),'o','markersize',10, 'markerfacecolor','k');
 hold on;
-
 
 thetas = [theta:2*pi/K:theta + 2*pi/K*(K-1)];
 
@@ -91,10 +86,7 @@ thetas = wrapTo2Pi(thetas);
 xk = cell(1,K);
 
 for i=1:length(todos)
-    x_o = todos(i,:); % un punto
-    
-    % lo llevo hasta u
-    
+    x_o = todos(i,:);    
     x = x_o - u;
     
     angulo2pi = wrapTo2Pi(atan2(x(2),x(1))); % angulo entre x y u, desde la horizontal
@@ -106,7 +98,6 @@ for i=1:length(todos)
         fin = wrapTo2Pi(fin);
         if angulo < fin
             xk{k} = [xk{k};x_o];
-            %plot(x_o(1),x_o(2),'o', 'color', colors{k});
         end
     end
     angulo = angulo2pi - thetas(K);
@@ -115,11 +106,9 @@ for i=1:length(todos)
     fin = wrapTo2Pi(fin);
     if angulo < fin
         xk{K} = [xk{K};x_o];
-        %         plot(x_o(1),x_o(2),'o', 'color', colors{K});
     end
-    
-    hold on;
 end
+
 for k=1:K
     plot(xk{k}(:,1),xk{k}(:,2),'o', 'color', colors{k});
     hold on;
@@ -127,16 +116,16 @@ end
 
 xlabel('F1 [Hz]');
 ylabel('F2 [Hz]');
-str = sprintf("%0.1f", 360/K);
+str = sprintf('%0.1f', theta*180/pi);
 title(str);
 xlim([f1_min, f1_max])
 ylim([f2_min, f2_max])
 
 
+%% medias y sigmas iniciales para cada clase
 
-%%
+% probabilidad de cada clase
 
-%M = 1; % con M más grande es muy "fácil"
 p_k = zeros(1,K);
 for k=1:K
     p_k(k) = length(xk{k});
@@ -145,9 +134,7 @@ p_k = p_k/sum(p_k);
 
 u = zeros(K, 2);
 for k = 1:K
-    %u(k, :) = mean(f{k}(1:M, :), 1);
     u(k, :) = mean(xk{k}, 1);
-    %u(k,:)
 end
 
 % sigma_k inicial => igual al sigma total de LDA , para todas las clases
@@ -178,11 +165,11 @@ end
 NN = length(xs);
 
 
-%%
+%% entrenamiento
 
-p_x = zeros(1,NN);
-II = 50;
-LL = zeros(1,II);
+p_x = zeros(1,NN); % probabilidad de cada muestra, p(x)
+II = 40; % numero de iteraciones
+LL = zeros(1,II); % valores de log likelihood para cada iteracion
 
 fig_x = figure;
 fig_ll = figure;
@@ -198,12 +185,17 @@ for iter = 1:II
         gamma_k(:,i) = gamma_k(:,i)/p_x(i);
     end
     
-    %pause
+    % pause
+    
+    % actualizar medias
+    
     u = zeros(K,2);
     
     for k=1:K
         u(k,:) = gamma_k(k,:)*xs/sum(gamma_k(k,:));
     end
+    
+    % actualizar sigmas
     
     sigma = cell(1,K);
     
@@ -215,9 +207,13 @@ for iter = 1:II
         sigma{k} = sigma{k}/sum(gamma_k(k,:));
     end
     
+    % actualizar probabilidades de cada clase
+    
     for k=1:K
         p_k(k) = sum(gamma_k(k,:))/NN;
     end
+    
+    % graficar pesando los colores con los gammas
     
     figure(fig_x);
     for i=1:NN
@@ -235,6 +231,8 @@ for iter = 1:II
     ylim([f2_min, f2_max])
     title('Primeros 2 formantes');
     
+    % graficar log likelihood
+    
     figure(fig_ll);
     
     LL(iter) = sum(log(p_x));
@@ -248,8 +246,6 @@ for iter = 1:II
     pause();
     
 end
-
-%% test
 
 %% test
 
@@ -287,6 +283,45 @@ for i = 1: length(xs)
     c(i) = k_max;
 end
 
+
+%% calcular error como #clasificaciones correctas/#total muestras
+fprintf('Error: %0.2f %% \n', sum(ws ~= c)/length(xs)*100);
+
+permutaciones = perms(1:K);
+nperms = size(permutaciones,1);
+errores = zeros(1,nperms);
+
+for n = 1:nperms
+    
+    clasif = zeros(1,length(xs));
+    
+    for i=1:length(xs)
+        
+        clasif(i) = permutaciones(n,c(i));
+        
+    end
+    
+    errores(n) = sum(ws ~= clasif);
+
+end
+
+[error_min, n_min] = min(errores);
+
+%errores
+
+
+    clasif = zeros(1,length(xs));
+    
+    for i=1:length(xs)
+        
+        clasif(i) = permutaciones(n_min,c(i));
+        
+    end
+    
+    nuevo_error = sum(ws ~= clasif);
+
+fprintf('Error: %0.2f %% \n', sum(ws ~= clasif)/length(xs)*100);
+
 %% graficos
 
 % x_k{k} muestras clasificadas para la clase k
@@ -294,7 +329,7 @@ end
 x_k = cell(1,K);
 
 for k=1:K
-    x_k{k} = xs(c==k,:);
+    x_k{k} = xs(clasif==k,:);
 end
 
 figure;
@@ -310,6 +345,28 @@ legend(legends);
 
 title('Resultados test');
 
+%% graficos con las clasificaciones correctas
 
-%% calcular error como #clasificaciones correctas/#total muestras
-fprintf('Error: %0.2f %% \n', sum(ws ~= c)/length(xs)*100);
+% x_k{k} muestras clasificadas para la clase k
+
+x_k = cell(1,K);
+
+for k=1:K
+    x_k{k} = xs(ws==k,:);
+end
+
+figure;
+
+for k=1:K
+    plot(x_k{k}(:,1),x_k{k}(:,2),'o','color',colors{k});
+    hold on;
+end
+xlim([f1_min, f1_max])
+ylim([f2_min, f2_max])
+
+legend(legends);
+
+title('Clasificacion correcta');
+
+
+

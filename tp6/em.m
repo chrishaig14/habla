@@ -44,7 +44,7 @@ p_k = p_k/sum(p_k);
 
 u = zeros(K,2);
 
-M = 5;
+M = 3;
 
 for i = 1:K
     u(i, :) = mean(f{i}(1:M, :), 1);
@@ -148,8 +148,6 @@ for iter = 1:II
     pause();
     
 end
-
-%% test
 
 %% test
 

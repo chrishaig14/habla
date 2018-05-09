@@ -51,7 +51,7 @@ legend(legends);
     xlim([f1_min, f1_max])
     ylim([f2_min, f2_max])
     
-title("Datos entrenamiento");
+title('Datos entrenamiento');
 
 % figure;
 % 
