@@ -22,7 +22,7 @@ end
 
 %% me quedo con N muestras y sólo los 2 primeros formantes
 
-f = cell(1, K);
+f = cell(1,K);
 t = cell(1,K);
 
 N = 40;
@@ -32,14 +32,41 @@ for k = 1:K
     t{k} = c{k}(N+1:end,1:2);
 end
 
-%% tomo M de cada clase y calculo las medias iniciales
+%% media
 
-M = 1; % con M más grande es muy "fácil"
+todos = [];
+
+for k = 1:K
+    todos = [todos;f{k}];
+end
+
+%% seccionar 
+
+[xk,u, theta] = seccionar(todos, K);
+
+figure;
+
+for k=1:K
+    plot(xk{k}(:,1),xk{k}(:,2),'o', 'color', colors{k});
+    hold on;
+end
+
+plot(u(1),u(2),'ko','markersize',10, 'markerfacecolor','k');
+
+xlabel('F1 [Hz]');
+ylabel('F2 [Hz]');
+xlim([f1_min, f1_max])
+ylim([f2_min, f2_max])
+
+str = sprintf('%0.1f', theta*180/pi);
+title(str);
+
+
+%%
 
 u = zeros(K, 2);
 for k = 1:K
-    u(k, :) = mean(f{k}(1:M, :), 1);
-    u(k,:)
+    u(k, :) = mean(xk{k}, 1);
 end
 
 %% L iteraciones
@@ -139,7 +166,6 @@ end
 p = p/sum(p);
 
 %
-
 
 f1 = 0:5:2000;
 f2 = 0:5:2000;
@@ -268,29 +294,28 @@ for i = 1: length(xs)
     c(i) = k_max;
 end
 
-%% graficos
+%% calcular error como #clasificaciones correctas/#total muestras
 
-% x_k{k} muestras clasificadas para la clase k
+fprintf('Error: %0.2f %% \n', sum(ws ~= c)/length(xs)*100);
 
-x_k = cell(1,K);
+clasif = corregir_etiquetas(ws,c, K);
 
-for k=1:K
-    x_k{k} = xs(c==k,:);
-end
+fprintf('Error: %0.2f %% \n', sum(ws ~= clasif)/length(xs)*100);
+
+%% grafico
 
 figure;
 
-for k=1:K
-    plot(x_k{k}(:,1),x_k{k}(:,2),'o','color',colors{k});
-    hold on;
-end
-    xlim([f1_min, f1_max])
-    ylim([f2_min, f2_max])
-    
-legend(legends);
+% resultados de test
+graficar_muestras(xs,clasif,'o',legends, colors, f1_min, f1_max, f2_min, f2_max, K);
 
-title('Resultados test');
+hold on
+
+% clasificación correcta
+graficar_muestras(xs,ws,'x',legends, colors, f1_min, f1_max, f2_min, f2_max, K);
+
+title('Test (o) y correcta (x)');
 
 
-%% calcular error como #clasificaciones correctas/#total muestras
-fprintf('Error: %0.2f %% \n', sum(ws ~= c)/length(xs)*100);
+
+
