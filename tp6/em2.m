@@ -37,20 +37,20 @@ for k = 1:K
 end
 
 %% valores iniciales
-
+% 
 todos = [];
 
 for k = 1:K
     todos = [todos;f{k}];
 end
-
-% calculo la media general
-u = mean(todos,1);
-
-figure;
-plot(todos(:,1),todos(:,2),'o');
-hold on;
-plot(u(1),u(2),'*');
+% 
+% % calculo la media general
+% u = mean(todos,1);
+% 
+% figure;
+% plot(todos(:,1),todos(:,2),'o');
+% hold on;
+% plot(u(1),u(2),'*');
 
 %% esto es para generar muestras random y ver como quedan las secciones
 % 
@@ -67,59 +67,83 @@ plot(u(1),u(2),'*');
 % end
 % u = mean(todos,1);
 
-sec = figure;
+% sec = figure;
+% 
+% %% seccionar en K regiones con un angulo theta random
+% 
+% theta = rand()*2*pi/K; % medido desde la horizontal en u
+% 
+% theta
+% 
+% figure(sec);
+% plot(u(1),u(2),'o','markersize',10, 'markerfacecolor','k');
+% hold on;
+% 
+% thetas = [theta:2*pi/K:theta + 2*pi/K*(K-1)];
+% 
+% thetas = wrapTo2Pi(thetas);
+% 
+% xk = cell(1,K);
+% 
+% for i=1:length(todos)
+%     x_o = todos(i,:);    
+%     x = x_o - u;
+%     
+%     angulo2pi = wrapTo2Pi(atan2(x(2),x(1))); % angulo entre x y u, desde la horizontal
+%     
+%     for k = 1:K-1
+%         angulo = angulo2pi - thetas(k);
+%         fin = thetas(k+1) - thetas(k);
+%         angulo = wrapTo2Pi(angulo);
+%         fin = wrapTo2Pi(fin);
+%         if angulo < fin
+%             xk{k} = [xk{k};x_o];
+%         end
+%     end
+%     angulo = angulo2pi - thetas(K);
+%     fin = thetas(1) - thetas(K);
+%     angulo = wrapTo2Pi(angulo);
+%     fin = wrapTo2Pi(fin);
+%     if angulo < fin
+%         xk{K} = [xk{K};x_o];
+%     end
+% end
+% 
+% for k=1:K
+%     plot(xk{k}(:,1),xk{k}(:,2),'o', 'color', colors{k});
+%     hold on;
+% end
+% 
+% xlabel('F1 [Hz]');
+% ylabel('F2 [Hz]');
+% str = sprintf('%0.1f', theta*180/pi);
+% title(str);
+% xlim([f1_min, f1_max])
+% ylim([f2_min, f2_max])
 
-%% seccionar en K regiones con un angulo theta random
+%% seccionar
 
-theta = rand()*2*pi/K; % medido desde la horizontal en u
+% sec = figure;
 
-theta
+[xk,u, theta] = seccionar(todos, K);
 
-figure(sec);
-plot(u(1),u(2),'o','markersize',10, 'markerfacecolor','k');
-hold on;
-
-thetas = [theta:2*pi/K:theta + 2*pi/K*(K-1)];
-
-thetas = wrapTo2Pi(thetas);
-
-xk = cell(1,K);
-
-for i=1:length(todos)
-    x_o = todos(i,:);    
-    x = x_o - u;
-    
-    angulo2pi = wrapTo2Pi(atan2(x(2),x(1))); % angulo entre x y u, desde la horizontal
-    
-    for k = 1:K-1
-        angulo = angulo2pi - thetas(k);
-        fin = thetas(k+1) - thetas(k);
-        angulo = wrapTo2Pi(angulo);
-        fin = wrapTo2Pi(fin);
-        if angulo < fin
-            xk{k} = [xk{k};x_o];
-        end
-    end
-    angulo = angulo2pi - thetas(K);
-    fin = thetas(1) - thetas(K);
-    angulo = wrapTo2Pi(angulo);
-    fin = wrapTo2Pi(fin);
-    if angulo < fin
-        xk{K} = [xk{K};x_o];
-    end
-end
+figure;
 
 for k=1:K
     plot(xk{k}(:,1),xk{k}(:,2),'o', 'color', colors{k});
     hold on;
 end
 
+plot(u(1),u(2),'ko','markersize',10, 'markerfacecolor','k');
+
 xlabel('F1 [Hz]');
 ylabel('F2 [Hz]');
-str = sprintf('%0.1f', theta*180/pi);
-title(str);
 xlim([f1_min, f1_max])
 ylim([f2_min, f2_max])
+
+str = sprintf('%0.1f', theta*180/pi);
+title(str);
+
 
 
 %% medias y sigmas iniciales para cada clase
