@@ -11771,15 +11771,34 @@ ul.typeahead-list > li > a {
 
     </style>
 <style type="text/css">
-    /*.container { width:100% !important;
-	center:false;
- }
+    .container {
+	width:100% !important;
+	padding-left: 0;
+}
 
 body {
-background-color: #111111;
+	background-color: white;
 }
+
+.reveal p, 
+.reveal ul,
+.reveal ol,
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+	color: black;
+ font-family: AnjaliOldLipi !important;
+}
+
+.reveal h2 {
+	border-bottom: 2px solid #ffaa00;
+	width: 100%;
+	padding-bottom: 10px;
+}
+
+/*
 .reveal p {
-color: white;
+color: #111111;
 }
 .reveal ul, ol {
 color: white;
@@ -11793,7 +11812,11 @@ background: #F00;
 .reveal table th, .reveal table td {
 color: white;
 }
-
+.reveal h2 {
+	border-bottom: 1px solid #0000ff;
+	width: 100%;
+}
+/*
 .reveal h1,
 .reveal h2,
 .reveal h3,
@@ -11807,8 +11830,8 @@ color: white;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   text-shadow: none; }
-*/
 
+*/
 
     </style>
 
@@ -11946,7 +11969,9 @@ a.anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Procesamiento-del-habla">Procesamiento del habla<a class="anchor-link" href="#Procesamiento-del-habla">&#182;</a></h1>
+<style>
+div.prompt {display:none}
+</style><h1 id="Procesamiento-del-habla">Procesamiento del habla<a class="anchor-link" href="#Procesamiento-del-habla">&#182;</a></h1>
 </div>
 </div>
 </div></section></section><section><section>
@@ -11954,7 +11979,32 @@ a.anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Speech-filter-model">Speech filter model<a class="anchor-link" href="#Speech-filter-model">&#182;</a></h1>
+<h2 id="Modelo-del-habla">Modelo del habla<a class="anchor-link" href="#Modelo-del-habla">&#182;</a></h2>
+</div>
+</div>
+</div><aside class="notes">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Para empezar a hablar de procesamiento del habla tenemos que tener un modelo de cómo se produce el habla. El modelo que usamos es este: tenemos una excitación que es la entrada a un sistema, esta excitación decimos que es un tres de deltas si es fonema voiced, o es ruido si es unvoiced. El filtro $H(z)$ es lo que distingue entre fonemas. Por ejemplo, si es una 'a' el fonema, la entrada es el tren de deltas y el $H(z)$ es el filtro correspondiente a la 'a'. Si es una 'f' la entrada es la de abajo y el $H(z)$ es el filtro de la 'f'.</p>
+
+</div>
+</div>
+</div>
+</aside>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>Excitación -&gt; filtro -&gt; señal de audio</li>
+<li>Voiced: tren de deltas</li>
+<li>Unvoiced: ruido</li>
+<li>$H(z)$ distinto para cada fonema</li>
+</ul>
+
 </div>
 </div>
 </div>
@@ -11966,15 +12016,38 @@ a.anchor-link {
 
 </div>
 </div>
-</div></section></section><section><section>
+</div><aside class="notes">
+
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Cepstrum">Cepstrum<a class="anchor-link" href="#Cepstrum">&#182;</a></h1>
+<p>Lo importante de esto es que lo que nos da la información acerca de qué fonema se dice es básicamente el filtro $H$.</p>
+<p>Entonces si tenemos una señal de audio $s[n]$ en la que queremos hacer reconocimiento, tenemos que de alguna forma obtener $H(z)$.</p>
+
 </div>
 </div>
-</div><div class="fragment">
+</div>
+</aside></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Cepstrum">Cepstrum<a class="anchor-link" href="#Cepstrum">&#182;</a></h2>
+</div>
+</div>
+</div><aside class="notes">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Según lo del grafico anterior, la señal de audio $s[n]$ es la excitación $x[n]$ pasada por el filtro $h[n]$.</p>
+
+</div>
+</div>
+</div>
+</aside><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -11983,7 +12056,18 @@ a.anchor-link {
 
 </div>
 </div>
-</div></div><div class="fragment">
+</div><aside class="notes">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Para hacer la desconvolución, separar $x(n)$ de $h(n)$ obviamente tenemos que trabajar con el espectro.</p>
+
+</div>
+</div>
+</div>
+</aside></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -11992,16 +12076,18 @@ a.anchor-link {
 
 </div>
 </div>
-</div></div><div class="fragment">
+</div><aside class="notes">
+
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>$|S(\omega)|=|X(\omega)|.|H(\omega)|$</p>
+<p>En frecuencia tenemos un producto, pero esto sigue siendo difícil de separar. Entonces lo que hacemos es aplicar el logaritmo al espectro, y esto resulta en una suma, que es mucho más fácil de separar.</p>
 
 </div>
 </div>
-</div></div><div class="fragment">
+</div>
+</aside></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12010,12 +12096,32 @@ a.anchor-link {
 
 </div>
 </div>
-</div>
+</div><aside class="notes">
+
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="cepstrum.png" alt="Cepstrum"></p>
+<p>Ahora que ya tenemos esta suma, si aplicamos otra vez una transformada o antitransformada, (según la versión), vemos que la parte correspondiente a $H$ queda en la parte más baja, mientras que la de $X$ queda en los coeficientes más altos. Entonces podemos simplemente tomar los primeros N coeficientes de $\hat{s}$ y nos quedamos con los coeficientes de $\hat{h}$. Con esto entonces ya tenemos la información del filtro H. Si bien podemos convertir este $\hat{H}$ a $H(\omega)$ o incluso a $h[n]$, en realidad no hace falta para el reconocimiento del habla y podemos usar los coeficientes Cepstrum directamente.</p>
+
+</div>
+</div>
+</div>
+</aside></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$$s(n) \rightarrow DFT \Rightarrow \log \Rightarrow IDFT \rightarrow \hat{s} (n)$$</p>
+
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$$\hat{s}(n) \rightarrow Lifter \rightarrow\hat{h} (n)$$</p>
 
 </div>
 </div>
@@ -12032,6 +12138,18 @@ a.anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>La sensibilidad del oído no es la misma para los distintos rangos de frecuencias</li>
+<li>Un valor "promediado" para cada rango:</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p><img src="mel.png" alt="Mel"></p>
 
 </div>
@@ -12041,7 +12159,34 @@ a.anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Clasificaci&#243;n">Clasificaci&#243;n<a class="anchor-link" href="#Clasificaci&#243;n">&#182;</a></h1>
+<p>$$s(n) \rightarrow DFT \Rightarrow Mel \Rightarrow \log \Rightarrow DCT \rightarrow \hat{s} (n)$$</p>
+
+</div>
+</div>
+</div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$$F(m)=\log \big\{ \sum_{k=0}^{N-1} |S(k)|^2 H_m(k) \big\} \ , \ 0 \leq m \leq M$$</p>
+
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$$\hat{s}(n)=\sum_{m=0}^{M-1} F(m) \cos\big(\pi n(m+\frac{1}{2})/M\big) \ , \ 0 \leq n \leq M$$</p>
+
+</div>
+</div>
+</div></div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Clasificaci&#243;n">Clasificaci&#243;n<a class="anchor-link" href="#Clasificaci&#243;n">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -12050,7 +12195,7 @@ a.anchor-link {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>Etiquetar a los MFCC con el fonema</li>
+<li>Etiquetar a los MFCC con el fonema correspondiente</li>
 </ul>
 
 </div>
@@ -12060,10 +12205,10 @@ a.anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Aprendizaje-supervisado">Aprendizaje supervisado<a class="anchor-link" href="#Aprendizaje-supervisado">&#182;</a></h2>
+<h3 id="Aprendizaje-supervisado">Aprendizaje supervisado<a class="anchor-link" href="#Aprendizaje-supervisado">&#182;</a></h3>
 </div>
 </div>
-</div><div class="fragment">
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12074,19 +12219,29 @@ a.anchor-link {
 
 </div>
 </div>
-</div></div></section><section>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ol>
-<li>Maximum likelihood: </li>
-</ol>
-<p>$\mu_k=$</p>
-<p>$\sigma_k^2=$</p>
-<ol>
-<li>Obtener $k$ que maximice $P(k|x) = \frac{P(x|k)P(k)}{P(x)} \Rightarrow P(x|k)P(k)$</li>
-</ol>
+<p>1) Maximum likelihood:</p>
+<p>$$\mu_{ML}^k= \frac{\sum_{z_i=k} x_i}{\#(z_i = k)}$$</p>
+<p>$$\mu_{ML} = \frac{1}{N} \sum_{i=1}^N x_i$$</p>
+<p>$$\Sigma_{ML}=\frac{1}{N} \sum_{i=1}^N(x_i-\mu_{ML})(x_i-\mu_{ML})^T$$</p>
+<ul>
+<li>Igual $\Sigma$ para todo $k$ $\Rightarrow$ separación lineal entre clases (LDA)</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>2) Obtener $k$ que maximice $P(k|x) = \frac{P(x|k)P(k)}{P(x)} \Rightarrow P(x|k)P(k)$</p>
+<p>$$P(x|k)=\mathcal{N}(x;\mu_{ML}^k,\Sigma_{ML})$$</p>
+<p>$$P(k)=\frac{\# (z_i = k)}{N}$$</p>
 
 </div>
 </div>
@@ -12095,19 +12250,21 @@ a.anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Aprendizaje-NO-supervisado">Aprendizaje NO supervisado<a class="anchor-link" href="#Aprendizaje-NO-supervisado">&#182;</a></h2>
+<h3 id="Aprendizaje-NO-supervisado">Aprendizaje NO supervisado<a class="anchor-link" href="#Aprendizaje-NO-supervisado">&#182;</a></h3>
 </div>
 </div>
-</div><div class="fragment">
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Set de entrenamiento: $x_1,...,x_N$ <strong>sin</strong> las etiquetas $z_1,...,z_N$</p>
+<ul>
+<li>Set de entrenamiento: $x_1,...,x_N$ <strong>sin</strong> las etiquetas $z_1,...,z_N$</li>
+</ul>
 
 </div>
 </div>
-</div></div></section><section>
+</div></section></section><section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12115,7 +12272,7 @@ a.anchor-link {
 <h3 id="Algoritmo-EM">Algoritmo EM<a class="anchor-link" href="#Algoritmo-EM">&#182;</a></h3>
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12139,6 +12296,8 @@ a.anchor-link {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>2) <strong>Paso E</strong>: Calcular $\gamma_k(x) = P(z=k|x)$: probabilidad de que la muestra $x$ pertenezca a la clase $k$.</p>
+<p>$$\gamma_k(x) = P(z=k|x)=\frac{P(x|z=k)P(z=k)}{P(x)}$$</p>
+<p>$$\gamma_k(x) = \frac{\pi_k \ \mathcal{N}(x;\mu_k,\Sigma_k)}{\sum_{l=1}^K \pi_l \ \mathcal{N} (x;\mu_l,\Sigma_l)}$$</p>
 
 </div>
 </div>
@@ -12149,7 +12308,7 @@ a.anchor-link {
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>3) <strong>Paso M</strong>: Reestimar $\mu_k$, $\sigma_k^2$, y $\pi_k=P(k)$ para cada clase.</p>
 <p>$$\mu_k=\frac{\sum_{i=1}^N \gamma_k(x_i) x_i}{\sum_{i=1}^N \gamma_k(x_i)}$$</p>
-<p>$$\sigma_k^2=\frac{\sum_{i=1}^N \gamma_k(x_i) (x_i-\mu_k)^2}{\sum_{i=1}^N \gamma_k(x_i)}$$</p>
+<p>$$\Sigma_k=\frac{\sum_{i=1}^N \gamma_k(x_i) (x_i-\mu_k)(x_i-\mu_k)^T}{\sum_{i=1}^N \gamma_k(x_i)}$$</p>
 <p>$$\pi_k=\frac{1}{N}\sum_{i=1}^N \gamma_k(x_i)$$</p>
 
 </div>
@@ -12179,7 +12338,7 @@ a.anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Cadenas-de-Markov">Cadenas de Markov<a class="anchor-link" href="#Cadenas-de-Markov">&#182;</a></h1>
+<h2 id="Cadenas-de-Markov">Cadenas de Markov<a class="anchor-link" href="#Cadenas-de-Markov">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -12188,8 +12347,8 @@ a.anchor-link {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>Estados</li>
-<li>Transiciones: probabilidades</li>
+<li>Estados: $1,...,N$</li>
+<li>Transiciones: probabilidades $a_{ij}$</li>
 </ul>
 
 </div>
@@ -12201,8 +12360,10 @@ a.anchor-link {
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Experimento: generar secuencia de estados $Q=q_1,...,q_T$</p>
 <ul>
-<li>$P(qt|q_{t-1},q_{t-2},...q_1) = P(q_t|q_{t-1})$ : la probabilidad de pasar de un estado a otro NO DEPENDE de todo la secuencia de estados previa</li>
-<li>$a_{ij} = P(q_t=j|q_{t-1}=i)$: la probabilidad de pasar de un estado a otro es constante en el tiempo</li>
+<li><p>$P(qt|q_{t-1},q_{t-2},...q_1) = P(q_t|q_{t-1})$ : la probabilidad de pasar de un estado a otro NO DEPENDE de todo la secuencia de estados previa</p>
+</li>
+<li><p>$a_{ij} = P(q_t=j|q_{t-1}=i)$: la probabilidad de pasar de un estado a otro es constante en el tiempo</p>
+</li>
 </ul>
 
 </div>
@@ -12212,7 +12373,7 @@ a.anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Cadenas-de-Markov-Ocultas-(HMM)">Cadenas de Markov Ocultas (HMM)<a class="anchor-link" href="#Cadenas-de-Markov-Ocultas-(HMM)">&#182;</a></h1>
+<h2 id="Cadenas-de-Markov-Ocultas-(HMM)">Cadenas de Markov Ocultas (HMM)<a class="anchor-link" href="#Cadenas-de-Markov-Ocultas-(HMM)">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -12291,7 +12452,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>1) Inicialización:</p>
+<p>1) <strong>Inicialización</strong>:</p>
 <p>$\phi_1(i)=b_i(y_1)\pi_i$</p>
 <p>$\psi_1(i)=0$</p>
 
@@ -12302,10 +12463,10 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>2) Recursión:</p>
+<p>2) <strong>Recursión</strong>:</p>
 <p>$\phi_t(j)=b_j(y_t)\max\limits_{1\leq i \leq N} a_{ij} \phi_{t-1}(i)$</p>
 <p>$\psi_t(j)=\argmax\limits_{1 \leq i \leq N} \phi_{t-1}(i) a_{ij}$</p>
-<p>Camino óptimo $S^* = s_1^*,...,s_t^*$ con $s_t^*=j$ $\Rightarrow$ $\psi_t(j)=s_{t-1}^*$, el estado anterior.</p>
+<p>Camino óptimo $S^* = s_1^*,...,s_t^*$ con $s_t^*=j$ $\Rightarrow$ $\psi_t(j)$ nos da $s_{t-1}^*$, el estado anterior a $j$.</p>
 <p>$\phi_t(j)$: probabilidad de ese camino.</p>
 
 </div>
@@ -12315,8 +12476,10 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>3) Backtracking:</p>
+<p>3) <strong>Backtracking</strong>:</p>
+<p>Primero el último estado:</p>
 <p>$q_T^*=\argmax\limits_{1 \leq j \leq N} \phi_T(j)$</p>
+<p>Después:</p>
 <p>$q_t^*=\psi_{t+1}(q_{t+1}^*)$</p>
 
 </div>
@@ -12326,7 +12489,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Entrenamiento-de-la-HMM">Entrenamiento de la HMM<a class="anchor-link" href="#Entrenamiento-de-la-HMM">&#182;</a></h2>
+<h3 id="Entrenamiento-de-la-HMM">Entrenamiento de la HMM<a class="anchor-link" href="#Entrenamiento-de-la-HMM">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -12335,7 +12498,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>Dado $Y$, hallar $\lambda=\{\{i\},\{a_{ij}\},\{b_j(y_t)\}\}$, con $i,j = 1,...,N$, $t = 1,...,T$</li>
+<li>Dado $Y$, estimar $\lambda=\{\{i\},\{a_{ij}\},\{b_j(y_t)\}\}$, con $i,j = 1,...,N$, $t = 1,...,T$</li>
 </ul>
 
 </div>
@@ -12345,7 +12508,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Algoritmo-Baum-Welch">Algoritmo Baum-Welch<a class="anchor-link" href="#Algoritmo-Baum-Welch">&#182;</a></h2>
+<h3 id="Algoritmo-Baum-Welch">Algoritmo Baum-Welch<a class="anchor-link" href="#Algoritmo-Baum-Welch">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -12364,7 +12527,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>1) Inicialización de $\mu_k$, $\sigma_k$ (igual que antes, por ejemplo: K-Means), y $\{a_{ij}\}$</p>
+<p>1) <strong>Inicialización</strong> de $\mu_k$, $\Sigma_k$ (generales, para todas las observaciones) y $\{a_{ij}\}$</p>
 
 </div>
 </div>
@@ -12373,7 +12536,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>2) Paso E:</p>
+<p>2) <strong>Paso E</strong>:</p>
 <p><strong>Recursión backward</strong></p>
 <p>$\alpha_t(j)=P(y_1,...,y_t,q_t=j)$: probabilidad de la secuencia de observaciones hasta $t$ y que el estado actual sea $j$</p>
 <p>$\alpha_t(j)=\sum_{i=1}^N b_j(y_t)a_{ij}\alpha_{t-1}(i)$</p>
@@ -12408,7 +12571,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>3) Paso M: reestimar los parámetros</p>
+<p>3) <strong>Paso M</strong>: reestimar los parámetros</p>
 
 </div>
 </div>
@@ -12426,7 +12589,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>$\Sigma_j=\frac{\sum_{t=1}^T (y_t-\mu_j)^T(y_t-\mu_j)\gamma_t(j)y_t}{\sum_{t=1}^T\gamma_t(j)}$: varianza para el estado $j$: varianza ponderada con las probabilidades de que cada observación se dé en el estado $j$</p>
+<p>$\Sigma_j=\frac{\sum_{t=1}^T (y_t-\mu_j)^T(y_t-\mu_j)\gamma_t(j)}{\sum_{t=1}^T\gamma_t(j)}$: varianza para el estado $j$: varianza ponderada con las probabilidades de que cada observación se dé en el estado $j$</p>
 
 </div>
 </div>
@@ -12435,7 +12598,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>$a_{ij}=\frac{\sum_{t=1}^T \xi_t(i,j)}{\sum_{t=1}^T\gamma_t(i)}$: probabilidad de transición del estado $i$ al $j$: suma de las probabilidades de pasar del estado $i$ al estado $j$ en todos los instantes, dividido por la probabilidad total de transición dsede el estado $i$ hacia otro estado</p>
+<p>$a_{ij}=\frac{\sum_{t=1}^T \xi_t(i,j)}{\sum_{t=1}^T\gamma_t(i)}$: probabilidad de transición del estado $i$ al $j$: suma de las probabilidades de pasar del estado $i$ al estado $j$ en todos los instantes, dividido por la probabilidad total de transición desde el estado $i$ hacia otro estado</p>
 
 </div>
 </div>
@@ -12444,7 +12607,9 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>4) Calcular log-likelihood</p>
+<p>4) Calcular <strong>log-likelihood</strong></p>
+<p>$$P(X) = \sum_{i=1}^N \alpha_{t_0}(i) \beta_{t_0}(i)$$</p>
+<p>$$LL = \log P(X)$$</p>
 
 </div>
 </div>
@@ -12462,7 +12627,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Aplicaci&#243;n-al-reconocimiento-de-habla">Aplicaci&#243;n al reconocimiento de habla<a class="anchor-link" href="#Aplicaci&#243;n-al-reconocimiento-de-habla">&#182;</a></h1>
+<h2 id="Aplicaci&#243;n-al-reconocimiento-de-habla">Aplicaci&#243;n al reconocimiento de habla<a class="anchor-link" href="#Aplicaci&#243;n-al-reconocimiento-de-habla">&#182;</a></h2>
 </div>
 </div>
 </div></section><section>
@@ -12479,7 +12644,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>2) Parametrización: coeficientes MFCC (12 + deltas = 39) por ventanas de 20ms, con 10ms de superposición</p>
+<p>2) Parametrización: coeficientes MFCC por cada ventana</p>
 
 </div>
 </div>
@@ -12502,11 +12667,13 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>Por cada frase:
-<img src="markov_frase.svg" alt="markov_frase"></li>
+<li><p>Por cada frase de entrenamiento:</p>
+<p>"la casa es linda":</p>
+</li>
 </ul>
+<p><img src="markov_frase.svg" alt="markov_frase"></p>
 <ul>
-<li>No hace falta segmentar</li>
+<li>No hace falta segmentar la frase en fonemas "a mano"</li>
 </ul>
 
 </div>
@@ -12518,8 +12685,10 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>4) Modelo de lenguaje:</p>
 <p><img src="modelo_lenguaje.svg" alt="modelo_lenguaje"></p>
-<p>Para las transiciones entre palabras:</p>
-<p>$P(w2|w1)$</p>
+<p>Para las transiciones entre palabras: bigramas:</p>
+<p>$$P(w_4|w_3,w_2,w_1) \simeq P(w_4|w_3)$$</p>
+<p>$$P(w_4|w_3)=\frac{N(w_3 w_4)}{N(w_3)}$$</p>
+<p>Puede haber muchas probabilidades iguales a 0 $\Rightarrow$ suavizado: Backoff, Kneser-Ney</p>
 
 </div>
 </div>
@@ -12528,7 +12697,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>5) Reconocimiento: Viterbi</p>
+<p>5) Reconocimiento: Viterbi en la red completa: <strong>Palabras (modelo de lenguaje) -&gt; HMM de Fonemas concatenados para cada palabra</strong></p>
 
 </div>
 </div>
@@ -12556,7 +12725,8 @@ require(
             controls: true,
             progress: true,
             history: true,
-
+		center:false,
+	width:'100%',
             transition: "slide",
 
             // Optional libraries used to extend on reveal.js
