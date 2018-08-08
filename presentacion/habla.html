@@ -1,64 +1,8 @@
-
 <!DOCTYPE html>
 <html>
-<head>
-
-<meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="chrome=1" />
-
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-<title>habla slides</title>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<head><meta charset="utf-8" />
+<title>habla</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-<!-- General and theme style sheets -->
-<link rel="stylesheet" href="reveal.js/css/reveal.css">
-<link rel="stylesheet" href="reveal.js/css/theme/simple.css" id="theme">
-
-<!-- If the query includes 'print-pdf', include the PDF print sheet -->
-<script>
-if( window.location.search.match( /print-pdf/gi ) ) {
-        var link = document.createElement( 'link' );
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-        link.href = 'reveal.js/css/print/pdf.css';
-        document.getElementsByTagName( 'head' )[0].appendChild( link );
-}
-
-</script>
-
-<!--[if lt IE 9]>
-<script src="reveal.js/lib/js/html5shiv.js"></script>
-<![endif]-->
-
-<!-- Loading the mathjax macro -->
-<!-- Load mathjax -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
-    <!-- MathJax configuration -->
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-            displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
-            processEscapes: true,
-            processEnvironments: true
-        },
-        // Center justify equations in code and markdown cells. Elsewhere
-        // we use CSS to left justify single line equations in code cells.
-        displayAlign: 'center',
-        "HTML-CSS": {
-            styles: {'.MathJax_Display': {"margin": 0}},
-            linebreaks: { automatic: true }
-        }
-    });
-    </script>
-    <!-- End of mathjax configuration -->
-
-<!-- Get Font-awesome from cdn -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.css">
 
 <style type="text/css">
     /*!
@@ -11771,34 +11715,15 @@ ul.typeahead-list > li > a {
 
     </style>
 <style type="text/css">
-    .container {
-	width:100% !important;
-	padding-left: 0;
-}
+    /*.container { width:100% !important;
+	center:false;
+ }
 
 body {
-	background-color: white;
+background-color: #111111;
 }
-
-.reveal p, 
-.reveal ul,
-.reveal ol,
-.reveal h1,
-.reveal h2,
-.reveal h3 {
-	color: black;
- font-family: AnjaliOldLipi !important;
-}
-
-.reveal h2 {
-	border-bottom: 2px solid #ffaa00;
-	width: 100%;
-	padding-bottom: 10px;
-}
-
-/*
 .reveal p {
-color: #111111;
+color: white;
 }
 .reveal ul, ol {
 color: white;
@@ -11812,11 +11737,7 @@ background: #F00;
 .reveal table th, .reveal table td {
 color: white;
 }
-.reveal h2 {
-	border-bottom: 1px solid #0000ff;
-	width: 100%;
-}
-/*
+
 .reveal h1,
 .reveal h2,
 .reveal h3,
@@ -11830,151 +11751,75 @@ color: white;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   text-shadow: none; }
-
 */
+
 
     </style>
 
 
 <style type="text/css">
 /* Overrides of notebook CSS for static HTML export */
-.reveal {
-  font-size: 160%;
+body {
+  overflow: visible;
+  padding: 8px;
 }
-.reveal pre {
-  width: inherit;
-  padding: 0.4em;
-  margin: 0px;
-  font-family: monospace, sans-serif;
-  font-size: 80%;
-  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
-}
-.reveal pre code {
-  padding: 0px;
-}
-.reveal section img {
-  border: 0px solid black;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0);
-}
-.reveal i {
-  font-style: normal;
-  font-family: FontAwesome;
-  font-size: 2em;
-}
-.reveal .slides {
-  text-align: left;
-}
-.reveal.fade {
-  opacity: 1;
-}
-.reveal .progress {
-  position: static;
-}
-.reveal .controls .navigate-left,
-.reveal .controls .navigate-left.enabled {
-  border-right-color: #727272;
-}
-.reveal .controls .navigate-left.enabled:hover,
-.reveal .controls .navigate-left.enabled.enabled:hover {
-  border-right-color: #dfdfdf;
-}
-.reveal .controls .navigate-right,
-.reveal .controls .navigate-right.enabled {
-  border-left-color: #727272;
-}
-.reveal .controls .navigate-right.enabled:hover,
-.reveal .controls .navigate-right.enabled.enabled:hover {
-  border-left-color: #dfdfdf;
-}
-.reveal .controls .navigate-up,
-.reveal .controls .navigate-up.enabled {
-  border-bottom-color: #727272;
-}
-.reveal .controls .navigate-up.enabled:hover,
-.reveal .controls .navigate-up.enabled.enabled:hover {
-  border-bottom-color: #dfdfdf;
-}
-.reveal .controls .navigate-down,
-.reveal .controls .navigate-down.enabled {
-  border-top-color: #727272;
-}
-.reveal .controls .navigate-down.enabled:hover,
-.reveal .controls .navigate-down.enabled.enabled:hover {
-  border-top-color: #dfdfdf;
-}
-.reveal .progress span {
-  background: #727272;
-}
-div.input_area {
-  padding: 0.06em;
-}
-div.code_cell {
-  background-color: transparent;
-}
-div.prompt {
-  width: 11ex;
-  padding: 0.4em;
-  margin: 0px;
-  font-family: monospace, sans-serif;
-  font-size: 80%;
-  text-align: right;
-}
-div.output_area pre {
-  font-family: monospace, sans-serif;
-  font-size: 80%;
-}
-div.output_prompt {
-  /* 5px right shift to account for margin in parent container */
-  margin: 5px 5px 0 0;
-}
-div.text_cell.rendered .rendered_html {
-  /* The H1 height seems miscalculated, we are just hidding the scrollbar */
-  overflow-y: hidden;
-}
-a.anchor-link {
-  /* There is still an anchor, we are only hidding it */
-  display: none;
-}
-.rendered_html p {
-  text-align: inherit;
-}
-::-webkit-scrollbar
-{
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar *
-{
-  background:transparent;
-}
-::-webkit-scrollbar-thumb
-{
-  background: #727272 !important;
+
+div#notebook {
+  overflow: visible;
+  border-top: none;
+}@media print {
+  div.cell {
+    display: block;
+    page-break-inside: avoid;
+  } 
+  div.output_wrapper { 
+    display: block;
+    page-break-inside: avoid; 
+  }
+  div.output { 
+    display: block;
+    page-break-inside: avoid; 
+  }
 }
 </style>
 
 <!-- Custom stylesheet, it must be in the same directory as the html file -->
 <link rel="stylesheet" href="custom.css">
 
-</head>
-
-
+<!-- Loading mathjax macro -->
+<!-- Load mathjax -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+    <!-- MathJax configuration -->
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+            processEscapes: true,
+            processEnvironments: true
+        },
+        // Center justify equations in code and markdown cells. Elsewhere
+        // we use CSS to left justify single line equations in code cells.
+        displayAlign: 'center',
+        "HTML-CSS": {
+            styles: {'.MathJax_Display': {"margin": 0}},
+            linebreaks: { automatic: true }
+        }
+    });
+    </script>
+    <!-- End of mathjax configuration --></head>
 <body>
+  <div tabindex="-1" id="notebook" class="border-box-sizing">
+    <div class="container" id="notebook-container">
 
-
-<div class="reveal">
-<div class="slides">
-<section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<style>
-div.prompt {display:none}
-</style><h1 id="Procesamiento-del-habla">Procesamiento del habla<a class="anchor-link" href="#Procesamiento-del-habla">&#182;</a></h1>
+<h1 id="Procesamiento-del-habla">Procesamiento del habla<a class="anchor-link" href="#Procesamiento-del-habla">&#182;</a></h1>
 </div>
 </div>
-</div></section></section><section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -11982,8 +11827,7 @@ div.prompt {display:none}
 <h2 id="Modelo-del-habla">Modelo del habla<a class="anchor-link" href="#Modelo-del-habla">&#182;</a></h2>
 </div>
 </div>
-</div><aside class="notes">
-
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -11993,17 +11837,14 @@ div.prompt {display:none}
 </div>
 </div>
 </div>
-</aside>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>Excitación $x(n)$ $\rightarrow$ filtro $H(z)$ $\rightarrow$ señal de audio $s(n)$<ul>
+<li>Excitación -&gt; filtro -&gt; señal de audio</li>
 <li>Voiced: tren de deltas</li>
 <li>Unvoiced: ruido</li>
-</ul>
-</li>
 <li>$H(z)$ distinto para cada fonema</li>
 </ul>
 
@@ -12014,12 +11855,11 @@ div.prompt {display:none}
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="speech_filter_model.png" style="display:block; margin-left: auto; margin-right: auto;"/></p>
+<p><img src="speech_filter_model.png" alt="speech_filter_model"></p>
 
 </div>
 </div>
-</div><aside class="notes">
-
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12030,7 +11870,6 @@ div.prompt {display:none}
 </div>
 </div>
 </div>
-</aside></section></section><section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12038,8 +11877,7 @@ div.prompt {display:none}
 <h2 id="Cepstrum">Cepstrum<a class="anchor-link" href="#Cepstrum">&#182;</a></h2>
 </div>
 </div>
-</div><aside class="notes">
-
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12049,18 +11887,6 @@ div.prompt {display:none}
 </div>
 </div>
 </div>
-</aside>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>Obtener $H(z)$ a partir de $s(n)$</li>
-</ul>
-
-</div>
-</div>
-</div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12069,8 +11895,7 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div><aside class="notes">
-
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12080,7 +11905,6 @@ div.prompt {display:none}
 </div>
 </div>
 </div>
-</aside></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12089,8 +11913,7 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div><aside class="notes">
-
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12100,7 +11923,15 @@ div.prompt {display:none}
 </div>
 </div>
 </div>
-</aside></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$|S(\omega)|=|X(\omega)|.|H(\omega)|$</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12109,57 +11940,7 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div></div></section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>$$\log |S(\omega)|$$</p>
-<p><img src="log_spectrum_salida.png" style="display:block; margin-left: auto; margin-right: auto;"/></p>
-<p>$$\log |H(\omega)|$$</p>
-<p><img src="log_spectrum_h.png" style="display:block; margin-left: auto; margin-right: auto;"/></p>
-<p>$$\log |X(\omega)|$$</p>
-<p><img src="log_spectrum_x.png" style="display:block; margin-left: auto; margin-right: auto;"/></p>
-
-</div>
-</div>
-</div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Vistos como señales:</p>
-<p>$\log |H(\omega)|$: frecuencias bajas</p>
-<p>$\log |X(\omega)|$: frecuencias altas</p>
-
-</div>
-</div>
-</div><div class="fragment">
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>$\log|S(\omega)|=\log|X(\omega)|+\log|H(\omega)|$ $\Rightarrow$ IDFT $\Rightarrow$ $\hat{s}(n)=\hat{x}(n) + \hat{h}(n)$</p>
-<p><strong>Liftering:</strong></p>
-<ul>
-<li>$\hat{h}(n):$ primeros $N$ coeficientes</li>
-<li>$\hat{x}(n):$ últimos coeficientes</li>
-</ul>
-
-</div>
-</div>
-</div></div><div class="fragment">
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>$$s(n) \rightarrow DFT \Rightarrow \log \Rightarrow IDFT \rightarrow \hat{s} (n)$$</p>
-<p>$$\hat{s}(n) \rightarrow Lifter \rightarrow\hat{h} (n)$$</p>
-
-</div>
-</div>
-</div><aside class="notes">
-
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12169,7 +11950,15 @@ div.prompt {display:none}
 </div>
 </div>
 </div>
-</aside></div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$$s(n) \rightarrow DFT \Rightarrow Mel \Rightarrow log \Rightarrow IDFT|FFT \rightarrow \hat{s} (n)$$</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12194,11 +11983,20 @@ div.prompt {display:none}
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="mel.png" style="display:block; margin-left: auto; margin-right: auto;"/></p>
+<p><img src="mel.png" alt="Mel"></p>
 
 </div>
 </div>
-</div><div class="fragment">
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$$s(n) \rightarrow DFT \Rightarrow Mel \Rightarrow log \Rightarrow DCT \rightarrow \hat{s} (n)$$</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12207,7 +12005,7 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div></div><div class="fragment">
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12216,16 +12014,7 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div></div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>$$s(n) \rightarrow DFT \Rightarrow Mel \Rightarrow \log \Rightarrow DCT \rightarrow \hat{s} (n)$$</p>
-
-</div>
-</div>
-</div></section></section><section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12244,7 +12033,7 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div></section></section><section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12263,33 +12052,29 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>1) Maximum likelihood:</p>
+<ol>
+<li>Maximum likelihood: </li>
+</ol>
 <p>$$\mu_{ML}^k= \frac{\sum_{z_i=k} x_i}{\#(z_i = k)}$$</p>
 <p>$$\mu_{ML} = \frac{1}{N} \sum_{i=1}^N x_i$$</p>
 <p>$$\Sigma_{ML}=\frac{1}{N} \sum_{i=1}^N(x_i-\mu_{ML})(x_i-\mu_{ML})^T$$</p>
 <ul>
 <li>Igual $\Sigma$ para todo $k$ $\Rightarrow$ separación lineal entre clases (LDA)</li>
 </ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>2) Obtener $k$ que maximice $P(k|x) = \frac{P(x|k)P(k)}{P(x)} \Rightarrow P(x|k)P(k)$</p>
+<ol>
+<li>Obtener $k$ que maximice $P(k|x) = \frac{P(x|k)P(k)}{P(x)} \Rightarrow P(x|k)P(k)$</li>
+</ol>
 <p>$$P(x|k)=\mathcal{N}(x;\mu_{ML}^k,\Sigma_{ML})$$</p>
 <p>$$P(k)=\frac{\# (z_i = k)}{N}$$</p>
 
 </div>
 </div>
-</div></section></section><section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12308,7 +12093,7 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div></section></section><section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12321,13 +12106,11 @@ div.prompt {display:none}
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>Asigna una probabilidad a cada $x$ de pertenecer a cada clase $k$</li>
-</ul>
+<p>Asigna una probabilidad a cada $x$ de pertenecer a cada clase $k$</p>
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12336,7 +12119,7 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12347,7 +12130,7 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12359,7 +12142,7 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12370,7 +12153,7 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12379,7 +12162,7 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div></section></section><section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12399,7 +12182,7 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div><div class="fragment">
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12414,7 +12197,7 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div></div></section></section><section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12435,7 +12218,7 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div><div class="fragment">
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12446,7 +12229,7 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div></div><div class="fragment">
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12456,16 +12239,6 @@ div.prompt {display:none}
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Para habla: ${a_{ij}}$: "hacia adelante"</p>
-<p><img src="markov_simple.svg" style="display:block; margin-left: auto; margin-right: auto;"/></p>
-
-</div>
-</div>
-</div></div></section></section><section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12494,7 +12267,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12503,37 +12276,36 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>1) <strong>Inicialización</strong>:</p>
-<p>$\pi_i$: probabilidad de empezar en el estado $i$</p>
 <p>$\phi_1(i)=b_i(y_1)\pi_i$</p>
 <p>$\psi_1(i)=0$</p>
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>2) <strong>Recursión</strong>:</p>
 <p>$\phi_t(j)=b_j(y_t)\max\limits_{1\leq i \leq N} a_{ij} \phi_{t-1}(i)$</p>
-<p>$\psi_t(j)=\argmax\limits_{1 \leq i \leq N}  a_{ij} \phi_{t-1}(i)$</p>
+<p>$\psi_t(j)=\argmax\limits_{1 \leq i \leq N} \phi_{t-1}(i) a_{ij}$</p>
 <p>Camino óptimo $S^* = s_1^*,...,s_t^*$ con $s_t^*=j$ $\Rightarrow$ $\psi_t(j)$ nos da $s_{t-1}^*$, el estado anterior a $j$.</p>
 <p>$\phi_t(j)$: probabilidad de ese camino.</p>
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>3) <strong>Terminación y backtracking</strong>:</p>
+<p>3) <strong>Backtracking</strong>:</p>
 <p>Primero el último estado:</p>
 <p>$q_T^*=\argmax\limits_{1 \leq j \leq N} \phi_T(j)$</p>
 <p>Después:</p>
@@ -12541,7 +12313,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div></section></section><section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12560,7 +12332,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div></section></section><section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12579,20 +12351,16 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>1) <strong>Inicialización</strong> de $\mu_k$, $\Sigma_k$ y $\{a_{ij}\}$.</p>
-<p>\begin{align*} 
-\{a_{ij}\} =\   &amp;0.5 \ \text{quedarse en }i\\ 
-&amp;0.5 \ \text{ir a } j
-\end{align*}</p>
+<p>1) <strong>Inicialización</strong> de $\mu_k$, $\Sigma_k$ (generales, para todas las observaciones) y $\{a_{ij}\}$</p>
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12607,7 +12375,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12617,7 +12385,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12627,7 +12395,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12636,7 +12404,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div><div class="fragment">
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12645,7 +12413,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div></div><div class="fragment">
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12654,7 +12422,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div></div><div class="fragment">
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12663,7 +12431,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div></div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12674,7 +12442,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12683,7 +12451,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div></section></section><section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12691,7 +12459,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 <h2 id="Aplicaci&#243;n-al-reconocimiento-de-habla">Aplicaci&#243;n al reconocimiento de habla<a class="anchor-link" href="#Aplicaci&#243;n-al-reconocimiento-de-habla">&#182;</a></h2>
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12700,7 +12468,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12709,49 +12477,43 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>3) HMM:</p>
 <ul>
-<li>3 estados emisores por fonema + 2 estados no emisores (inicial y final) para unirlos:
-<img src="markov_fonema.svg" style="display:block; margin-left: auto; margin-right: auto;"/></li>
+<li>3 estados emisores por fonema + 2 estados no emisores (inicial y final) para unirlos:</li>
 </ul>
+<p><img src="markov_fonema.svg" alt="markov_fonema"></p>
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>4) Entrenamiento:</p>
 <ul>
-<li><p>Por cada frase:</p>
+<li><p>Por cada frase de entrenamiento:</p>
 <p>"la casa es linda":</p>
 </li>
 </ul>
-<p><img src="markov_frase.svg" style="display:block; margin-left: auto; margin-right: auto;"/></p>
+<p><img src="markov_frase.svg" alt="markov_frase"></p>
 <ul>
-<li><p>No hace falta segmentar la frase en fonemas "a mano"</p>
-</li>
-<li><p>L frases:
-  $$\mu_j=\frac{\sum_{l=1}^L\sum_{t=1}^{T_l}\gamma_t^l(j)y_t^l}{\sum_{l=1}^L\sum_{t=1}^{T_l}\gamma_t^l(j)}$$
-  ... lo mismo para $\Sigma_j$</p>
-</li>
+<li>No hace falta segmentar la frase en fonemas "a mano"</li>
 </ul>
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>4) Modelo de lenguaje:</p>
-<p><img src="modelo_lenguaje.svg" style="display:block; margin-left: auto; margin-right: auto;"/></p>
+<p><img src="modelo_lenguaje.svg" alt="modelo_lenguaje"></p>
 <p>Para las transiciones entre palabras: bigramas:</p>
 <p>$$P(w_4|w_3,w_2,w_1) \simeq P(w_4|w_3)$$</p>
 <p>$$P(w_4|w_3)=\frac{N(w_3 w_4)}{N(w_3)}$$</p>
@@ -12759,104 +12521,21 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div></section><section>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>5) Reconocimiento: Viterbi en la red completa: <strong>Palabras (modelo de lenguaje) $\Rightarrow$ HMM de Fonemas concatenados para cada palabra</strong></p>
+<p>5) Reconocimiento: Viterbi en la red completa: <strong>Palabras (modelo de lenguaje) -&gt; HMM de Fonemas concatenados para cada palabra</strong></p>
 
 </div>
 </div>
-</div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Mezcla-de-gaussianas">Mezcla de gaussianas<a class="anchor-link" href="#Mezcla-de-gaussianas">&#182;</a></h3><p>$$b_j(y)=\sum_{m=1}^M c_{jm}\mathcal{N}(y;\mu_{jm},\Sigma_{jm})$$</p>
-<p><img src="mixture.png" width=600 height=600 style="display:block; margin-left: auto; margin-right: auto;"/></p>
-
-</div>
-</div>
-</div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Baum-Welch">Baum-Welch<a class="anchor-link" href="#Baum-Welch">&#182;</a></h4><p>$$\gamma_t(j,m)=\Bigg[\frac{\alpha_t(j)\beta_t(j)}{\sum_{i=1}^N\alpha_t(i)\beta_t(i)}\Bigg]\Bigg[{\frac{c_{jm}b_{jm}(y_t)}{\sum_{n=1}^M c_{jn}b_{jn}(y_t)}}\Bigg]$$</p>
-<p>$$\mu_{jm}=\frac{\sum_{t=1}^T\gamma_t(j,m)y_t}{\sum_{t=1}^T\gamma_t(j,m)}$$</p>
-<p>$$c_{jm}=\frac{\sum_{t=1}^T\gamma_t(j,m)}{\sum_{t=1}^T\sum_{n=1}^M\gamma_t(j,n)}$$</p>
-<center>Lo mismo para $\Sigma_{jm}$</center>
-</div>
-</div>
-</div></section></section>
-</div>
-</div>
-
-<script>
-
-require(
-    {
-      // it makes sense to wait a little bit when you are loading
-      // reveal from a cdn in a slow connection environment
-      waitSeconds: 15
-    },
-    [
-      "reveal.js/lib/js/head.min.js",
-      "reveal.js/js/reveal.js"
-    ],
-
-    function(head, Reveal){
-
-        // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
-        Reveal.initialize({
-            controls: true,
-            progress: true,
-            history: true,
-
-            transition: "slide",
-
-            // Optional libraries used to extend on reveal.js
-            dependencies: [
-                { src: "reveal.js/lib/js/classList.js",
-                  condition: function() { return !document.body.classList; } },
-                { src: "reveal.js/plugin/notes/notes.js",
-                  async: true,
-                  condition: function() { return !!document.body.classList; } }
-            ]
-        });
-
-        var update = function(event){
-          if(MathJax.Hub.getAllJax(Reveal.getCurrentSlide())){
-            MathJax.Hub.Rerender(Reveal.getCurrentSlide());
-          }
-        };
-
-        Reveal.addEventListener('slidechanged', update);
-
-        function setScrollingSlide() {
-            var scroll = false
-            if (scroll === true) {
-              var h = $('.reveal').height() * 0.95;
-              $('section.present').find('section')
-                .filter(function() {
-                  return $(this).height() > h;
-                })
-                .css('height', 'calc(95vh)')
-                .css('overflow-y', 'scroll')
-                .css('margin-top', '20px');
-            }
-        }
-
-        // check and set the scrolling slide every time the slide change
-        Reveal.addEventListener('slidechanged', setScrollingSlide);
-
-    }
-
-);
-</script>
-
+    </div>
+  </div>
 </body>
+
+ 
 
 
 </html>
