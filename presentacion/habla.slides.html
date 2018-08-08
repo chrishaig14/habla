@@ -11999,9 +11999,11 @@ div.prompt {display:none}
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>Excitación -&gt; filtro -&gt; señal de audio</li>
+<li>Excitación $\rightarrow$ filtro $\rightarrow$ señal de audio<ul>
 <li>Voiced: tren de deltas</li>
 <li>Unvoiced: ruido</li>
+</ul>
+</li>
 <li>$H(z)$ distinto para cada fonema</li>
 </ul>
 
@@ -12087,7 +12089,7 @@ div.prompt {display:none}
 </div>
 </div>
 </div>
-</aside></div></section></section><section><section>
+</aside></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12096,12 +12098,23 @@ div.prompt {display:none}
 
 </div>
 </div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$$\log |S(\omega)|$$</p>
+<p><img src="log_spectrum_salida.png" style="display:block; margin-left: auto; margin-right: auto;"/></p>
+
+</div>
+</div>
 </div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>$\log |S(\omega)|$ <img src="log_spectrum_salida.png" alt="log_spectrum_salida"></p>
+<p>$$\log |H(\omega)|$$</p>
+<p><img src="log_spectrum_h.png" style="display:block; margin-left: auto; margin-right: auto;"/></p>
 
 </div>
 </div>
@@ -12110,21 +12123,12 @@ div.prompt {display:none}
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>$\log |H(\omega)|$ <img src="log_spectrum_h.png" alt="log_spectrum_h"></p>
+<p>$$\log |X(\omega)|$$</p>
+<p><img src="log_spectrum_x.png" style="display:block; margin-left: auto; margin-right: auto;"/></p>
 
 </div>
 </div>
-</div></div><div class="fragment">
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>$\log |X(\omega)|$</p>
-<p><img src="log_spectrum_x.png" alt="log_spectrum_x"></p>
-
-</div>
-</div>
-</div>
+</div></div></section></section><section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12135,16 +12139,29 @@ div.prompt {display:none}
 
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>$\log|S(\omega)|=\log|X(\omega)|+\log|H(\omega)|$</p>
-<p>=&gt; IDFT =&gt;</p>
-<p>$\hat{s}(n)=\hat{x}(n) + \hat{h}(n)$</p>
-<p>$\hat{h}(n):$ primeros N coeficientes</p>
-<p>$\hat{x}(n):$ últimos coeficientes</p>
+<p>$\log|S(\omega)|=\log|X(\omega)|+\log|H(\omega)|$ $\Rightarrow$ IDFT $\Rightarrow$ $\hat{s}(n)=\hat{x}(n) + \hat{h}(n)$</p>
+<p><strong>Liftering:</strong></p>
+<ul>
+<li><p>$\hat{h}(n):$ primeros $N$ coeficientes</p>
+</li>
+<li><p>$\hat{x}(n):$ últimos coeficientes</p>
+</li>
+</ul>
+
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$$s(n) \rightarrow DFT \Rightarrow \log \Rightarrow IDFT \rightarrow \hat{s} (n)$$</p>
+<p>$$\hat{s}(n) \rightarrow Lifter \rightarrow\hat{h} (n)$$</p>
 
 </div>
 </div>
@@ -12159,25 +12176,7 @@ div.prompt {display:none}
 </div>
 </div>
 </div>
-</aside></div><div class="fragment">
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>$$s(n) \rightarrow DFT \Rightarrow \log \Rightarrow IDFT \rightarrow \hat{s} (n)$$</p>
-
-</div>
-</div>
-</div></div><div class="fragment">
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>$$\hat{s}(n) \rightarrow Lifter \rightarrow\hat{h} (n)$$</p>
-
-</div>
-</div>
-</div></div></section></section><section><section>
+</aside></div></section></section><section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12202,16 +12201,7 @@ div.prompt {display:none}
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="mel.png" alt="Mel"></p>
-
-</div>
-</div>
-</div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>$$s(n) \rightarrow DFT \Rightarrow Mel \Rightarrow \log \Rightarrow DCT \rightarrow \hat{s} (n)$$</p>
+<p><img src="mel.png" style="display:block; margin-left: auto; margin-right: auto;"/></p>
 
 </div>
 </div>
@@ -12234,6 +12224,15 @@ div.prompt {display:none}
 </div>
 </div>
 </div></div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$$s(n) \rightarrow DFT \Rightarrow Mel \Rightarrow \log \Rightarrow DCT \rightarrow \hat{s} (n)$$</p>
+
+</div>
+</div>
+</div></section></section><section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12469,7 +12468,7 @@ div.prompt {display:none}
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Para habla: ${a_{ij}}$: "hacia adelante"</p>
-<p><img src="markov_simple.svg" alt="markov_simple"></p>
+<p><img src="markov_simple.svg" style="display:block; margin-left: auto; margin-right: auto;"/></p>
 
 </div>
 </div>
@@ -12723,9 +12722,9 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>3) HMM:</p>
 <ul>
-<li>3 estados emisores por fonema + 2 estados no emisores (inicial y final) para unirlos:</li>
+<li>3 estados emisores por fonema + 2 estados no emisores (inicial y final) para unirlos:
+<img src="markov_fonema.svg" style="display:block; margin-left: auto; margin-right: auto;"/></li>
 </ul>
-<p><img src="markov_fonema.svg" alt="markov_fonema"></p>
 
 </div>
 </div>
@@ -12740,7 +12739,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 <p>"la casa es linda":</p>
 </li>
 </ul>
-<p><img src="markov_frase.svg" alt="markov_frase"></p>
+<p><img src="markov_frase.svg" style="display:block; margin-left: auto; margin-right: auto;"/></p>
 <ul>
 <li><p>No hace falta segmentar la frase en fonemas "a mano"</p>
 </li>
@@ -12758,7 +12757,7 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>4) Modelo de lenguaje:</p>
-<p><img src="modelo_lenguaje.svg" alt="modelo_lenguaje"></p>
+<p><img src="modelo_lenguaje.svg" style="display:block; margin-left: auto; margin-right: auto;"/></p>
 <p>Para las transiciones entre palabras: bigramas:</p>
 <p>$$P(w_4|w_3,w_2,w_1) \simeq P(w_4|w_3)$$</p>
 <p>$$P(w_4|w_3)=\frac{N(w_3 w_4)}{N(w_3)}$$</p>
@@ -12780,8 +12779,8 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Mezcla de gaussianas:
-    <img src="mixture_scaled.png" alt="mixture"></p>
+<h3 id="Mezcla-de-gaussianas">Mezcla de gaussianas<a class="anchor-link" href="#Mezcla-de-gaussianas">&#182;</a></h3><p>$$b_j(y)=\sum_{m=1}^M c_{jm}\mathcal{N}(y;\mu_{jm},\Sigma_{jm})$$</p>
+<p><img src="mixture.png" width=600 height=600 style="display:block; margin-left: auto; margin-right: auto;"/></p>
 
 </div>
 </div>
@@ -12790,12 +12789,10 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Baum-Welch:</p>
-<p>$$b_j(y)=\sum_{m=1}^M c_{jm}\mathcal{N}(y;\mu_{jm},\Sigma_{jm})$$</p>
-<p>$$\gamma_t(j,m)=\Bigg[\frac{\alpha_t(j)\beta_t(j)}{\sum_{i=1}^N\alpha_t(i)\beta_t(i)}\Bigg]\Bigg[{\frac{c_{jm}b_{jm}(y_t)}{\sum_{n=1}^M c_{jn}b_{jn}(y_t)}}\Bigg]$$</p>
+<h4 id="Baum-Welch">Baum-Welch<a class="anchor-link" href="#Baum-Welch">&#182;</a></h4><p>$$\gamma_t(j,m)=\Bigg[\frac{\alpha_t(j)\beta_t(j)}{\sum_{i=1}^N\alpha_t(i)\beta_t(i)}\Bigg]\Bigg[{\frac{c_{jm}b_{jm}(y_t)}{\sum_{n=1}^M c_{jn}b_{jn}(y_t)}}\Bigg]$$</p>
 <p>$$\mu_{jm}=\frac{\sum_{t=1}^T\gamma_t(j,m)y_t}{\sum_{t=1}^T\gamma_t(j,m)}$$</p>
 <p>$$c_{jm}=\frac{\sum_{t=1}^T\gamma_t(j,m)}{\sum_{t=1}^T\sum_{n=1}^M\gamma_t(j,n)}$$</p>
-
+<center>Lo mismo para $\Sigma_{jm}$</center>
 </div>
 </div>
 </div></section></section>
