@@ -12087,12 +12087,64 @@ div.prompt {display:none}
 </div>
 </div>
 </div>
-</aside></div><div class="fragment">
+</aside></div></section></section><section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>$\log|S(\omega)|=\log|X(\omega)|+\log|H(\omega)|$</p>
+
+</div>
+</div>
+</div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$\log |S(\omega)|$ <img src="log_spectrum_salida.png" alt="log_spectrum_salida"></p>
+
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$\log |H(\omega)|$ <img src="log_spectrum_h.png" alt="log_spectrum_h"></p>
+
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$\log |X(\omega)|$</p>
+<p><img src="log_spectrum_x.png" alt="log_spectrum_x"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Vistos como señales:</p>
+<p>$\log |H(\omega)|$: frecuencias bajas</p>
+<p>$\log |X(\omega)|$: frecuencias altas</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>$\log|S(\omega)|=\log|X(\omega)|+\log|H(\omega)|$</p>
+<p>=&gt; IDFT =&gt;</p>
+<p>$\hat{s}(n)=\hat{x}(n) + \hat{h}(n)$</p>
+<p>$\hat{h}(n):$ primeros N coeficientes</p>
+<p>$\hat{x}(n):$ últimos coeficientes</p>
 
 </div>
 </div>
@@ -12277,7 +12329,9 @@ div.prompt {display:none}
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Asigna una probabilidad a cada $x$ de pertenecer a cada clase $k$</p>
+<ul>
+<li>Asigna una probabilidad a cada $x$ de pertenecer a cada clase $k$</li>
+</ul>
 
 </div>
 </div>
@@ -12409,6 +12463,16 @@ div.prompt {display:none}
 
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Para habla: ${a_{ij}}$: "hacia adelante"</p>
+<p><img src="markov_simple.svg" alt="markov_simple"></p>
+
+</div>
+</div>
 </div></div></section></section><section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
@@ -12527,7 +12591,11 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>1) <strong>Inicialización</strong> de $\mu_k$, $\Sigma_k$ (generales, para todas las observaciones) y $\{a_{ij}\}$</p>
+<p>1) <strong>Inicialización</strong> de $\mu_k$, $\Sigma_k$ (generales, para todas las observaciones) y $\{a_{ij}\}$.</p>
+<p>\begin{align*} 
+\{a_{ij}\} =\   &amp;0.5 \ \text{quedarse en }i\\ 
+&amp;0.5 \ \text{ir a } j
+\end{align*}</p>
 
 </div>
 </div>
@@ -12661,24 +12729,30 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 
 </div>
 </div>
-</div><div class="fragment">
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>4) Entrenamiento:</p>
 <ul>
-<li><p>Por cada frase de entrenamiento:</p>
+<li><p>Por cada frase:</p>
 <p>"la casa es linda":</p>
 </li>
 </ul>
 <p><img src="markov_frase.svg" alt="markov_frase"></p>
 <ul>
-<li>No hace falta segmentar la frase en fonemas "a mano"</li>
+<li><p>No hace falta segmentar la frase en fonemas "a mano"</p>
+</li>
+<li><p>L frases:
+  $$\mu_j=\frac{\sum_{l=1}^L\sum_{t=1}^{T_l}\gamma_t^l(j)y_t^l}{\sum_{l=1}^L\sum_{t=1}^{T_l}\gamma_t^l(j)}$$
+  ... lo mismo para $\Sigma_j$</p>
+</li>
 </ul>
 
 </div>
 </div>
-</div></div></section><section>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12697,7 +12771,30 @@ $Q^*=\argmax\limits_{\forall \ Q} P(Q|Y)$</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>5) Reconocimiento: Viterbi en la red completa: <strong>Palabras (modelo de lenguaje) -&gt; HMM de Fonemas concatenados para cada palabra</strong></p>
+<p>5) Reconocimiento: Viterbi en la red completa: <strong>Palabras (modelo de lenguaje) $\Rightarrow$ HMM de Fonemas concatenados para cada palabra</strong></p>
+
+</div>
+</div>
+</div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Mezcla de gaussianas:
+    <img src="mixture_scaled.png" alt="mixture"></p>
+
+</div>
+</div>
+</div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Baum-Welch:</p>
+<p>$$b_j(y)=\sum_{m=1}^M c_{jm}\mathcal{N}(y;\mu_{jm},\Sigma_{jm})$$</p>
+<p>$$\gamma_t(j,m)=\Bigg[\frac{\alpha_t(j)\beta_t(j)}{\sum_{i=1}^N\alpha_t(i)\beta_t(i)}\Bigg]\Bigg[{\frac{c_{jm}b_{jm}(y_t)}{\sum_{n=1}^M c_{jn}b_{jn}(y_t)}}\Bigg]$$</p>
+<p>$$\mu_{jm}=\frac{\sum_{t=1}^T\gamma_t(j,m)y_t}{\sum_{t=1}^T\gamma_t(j,m)}$$</p>
+<p>$$c_{jm}=\frac{\sum_{t=1}^T\gamma_t(j,m)}{\sum_{t=1}^T\sum_{n=1}^M\gamma_t(j,n)}$$</p>
 
 </div>
 </div>
@@ -12725,8 +12822,7 @@ require(
             controls: true,
             progress: true,
             history: true,
-		center:false,
-	width:'100%',
+
             transition: "slide",
 
             // Optional libraries used to extend on reveal.js
